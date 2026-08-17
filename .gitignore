@@ -1,0 +1,21 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+out/
+
+# Java-bygg
+target/
+build/
+*.class
+
+# Maven wrapper-jar (naar vi kommer til Spring i uke 41)
+.mvn/wrapper/maven-wrapper.jar
+
+# Logger og midlertidige filer
+*.log
+hs_err_pid*
+
+# OS
+.DS_Store
+Thumbs.db
