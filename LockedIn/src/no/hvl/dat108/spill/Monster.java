@@ -28,5 +28,8 @@ public class Monster implements Angripbar{
         return hp;
     }
 
-
+    @Override
+    public String toString() {
+        return navn;
+    }
 }

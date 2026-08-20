@@ -6,6 +6,7 @@ import java.util.List;
 public class Rom {
     private final String navn;
     private final List<Monster> monstre = new ArrayList<>();
+    private final List<Angripbar> angripbare = new ArrayList<>();
     private final List<Skatt> skatter = new ArrayList<>();
     private final Hendelse vedInngang;
 
@@ -16,6 +17,7 @@ public class Rom {
 
     public void leggTil(Monster m){monstre.add(m);}
     public void leggTil(Skatt s){skatter.add(s);}
+    public void leggTil(Angripbar a){angripbare.add(a);}
 
     public void gaaInn(Helt helt) {
         System.out.println("Du er i:" + navn);
@@ -25,5 +27,6 @@ public class Rom {
     }
 
     public List<Monster> monstre() {return monstre;}
+    public List<Angripbar> angripbar() {return angripbare;}
     public List<Skatt> skatter() {return skatter;}
 }
