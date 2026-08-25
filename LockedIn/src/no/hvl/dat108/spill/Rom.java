@@ -20,10 +20,29 @@ public class Rom {
     public void leggTil(Angripbar a){angripbare.add(a);}
 
     public void gaaInn(Helt helt) {
-        System.out.println("Du er i:" + navn);
+        System.out.println("Du er i: " + navn);
         vedInngang.skjer(helt);
+        visInnhold();
+    }
+
+    public void visInnhold(){
         System.out.println("Monster her:" + monstre);
         System.out.println("Skatter her:" + skatter);
+    }
+
+    public void angripFoerste(Helt helt){
+        for (Monster m : monstre){
+            if(m.lever()){
+                int skade = helt.angrip(m);
+                System.out.println(helt.navn() + " gjør " + skade + " skade på " + m.navn() + ".");
+                if (!m.lever()){
+                    System.out.println(m.navn() + " er drept.");
+                }
+                return;
+            }
+
+        }
+        System.out.println("Det er ingenting å angripe her.");
     }
 
     public List<Monster> monstre() {return monstre;}

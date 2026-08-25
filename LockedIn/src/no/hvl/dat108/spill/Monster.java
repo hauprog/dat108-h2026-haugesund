@@ -30,6 +30,6 @@ public class Monster implements Angripbar{
 
     @Override
     public String toString() {
-        return navn;
+        return navn + " (" + hp + " hp)";
     }
 }

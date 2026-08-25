@@ -3,6 +3,7 @@ package no.hvl.dat108.spill;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,8 +38,8 @@ public class Main {
         Rom operasjonsstue34 = new Rom("operasjonsstue 34",
                 jasonTall > bartekTall ? doerFryserTilIs : doerRevetNed);
 
-        Monster rottekonge = new Monster("Rottekonge", 500);
-        Angripbar rottedronning = new Monster("Rottedronning", 500);
+        Monster rottekonge = new Monster("Rottekonge", 20);
+        Monster rottedronning = new Monster("Rottedronning", 500);
 
         operasjonsstue7.leggTil(rottekonge);
         operasjonsstue7.leggTil(rottedronning);
@@ -59,5 +60,32 @@ public class Main {
 
         List<Rom> verden = List.of(operasjonsstue7);
         System.out.println("Rom i verdenen: " + verden.size());
+
+
+
+        Map<String, Kommando> kommandoer = new HashMap<>();
+        kommandoer.put("angrip", (h, r) -> r.angripFoerste(h));
+        kommandoer.put("se", (h, r) -> r.visInnhold());
+
+        Kommando ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
+
+
+
+
+        Scanner inn = new Scanner(System.in);
+
+        while(true){
+            System.out.print("> ");
+            String kommando = inn.nextLine().trim().toLowerCase();
+
+            if (kommando.equals("q")) {
+                break;
+            }
+            kommandoer.getOrDefault(kommando, ugyldigKommando).utfoer(helt, operasjonsstue7);
+
+
+        }
+
+
     }
 }

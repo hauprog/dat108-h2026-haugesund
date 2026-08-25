@@ -5,7 +5,8 @@ import java.util.Random;
 public class Helt implements Angripbar {
     private final String navn;
     private int styrke;
-    private final Random terning = new Random();
+    private int hp = 100;
+    //private final Random terning = new Random();
 
     public Helt(String navn, int styrke) {
         this.navn = navn;
@@ -20,12 +21,12 @@ public class Helt implements Angripbar {
 
     @Override
     public void taSkade(int mengde) {
-
+        hp = Math.max(0, hp - mengde);
     }
 
     @Override
     public boolean lever() {
-        return false;
+        return hp > 0;
     }
 
     @Override
