@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.BiConsumer;
 
 public class Main {
     public static void main(String[] args) {
@@ -62,12 +63,11 @@ public class Main {
         System.out.println("Rom i verdenen: " + verden.size());
 
 
-
-        Map<String, Kommando> kommandoer = new HashMap<>();
+        Map<String, BiConsumer<Helt, Rom>> kommandoer = new HashMap<>();
         kommandoer.put("angrip", (h, r) -> r.angripFoerste(h));
         kommandoer.put("se", (h, r) -> r.visInnhold());
 
-        Kommando ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
+        BiConsumer<Helt, Rom> ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
 
 
 
@@ -81,7 +81,7 @@ public class Main {
             if (kommando.equals("q")) {
                 break;
             }
-            kommandoer.getOrDefault(kommando, ugyldigKommando).utfoer(helt, operasjonsstue7);
+            kommandoer.getOrDefault(kommando, ugyldigKommando).accept(helt, operasjonsstue7);
 
 
         }
