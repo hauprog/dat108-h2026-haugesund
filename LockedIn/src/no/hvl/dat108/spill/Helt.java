@@ -1,16 +1,21 @@
 package no.hvl.dat108.spill;
 
 import java.util.Random;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 public class Helt implements Angripbar {
     private final String navn;
     private int styrke;
     private int hp = 100;
+    private final int maxHP = 100;
     //private final Random terning = new Random();
+    private final IntSupplier terning;
 
-    public Helt(String navn, int styrke) {
+    public Helt(String navn, int styrke, IntSupplier terning) {
         this.navn = navn;
         this.styrke = styrke;
+        this.terning = terning;
     }
 
     public int angrip(Angripbar offer){
@@ -32,5 +37,15 @@ public class Helt implements Angripbar {
     @Override
     public String navn() {
         return navn;
+    }
+
+    @Override
+    public int hp() {
+        return hp;
+    }
+
+    @Override
+    public int maxHP() {
+        return maxHP;
     }
 }

@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class Main {
     public static void main(String[] args) {
-        Helt helt = new Helt("Ole", 5);
+        Helt helt = new Helt("Ole", 5, () -> 4);
 
         // Oppretter et Rom-objekt ved inline lambda-deklarasjon av Hendelse som argument 2.
         Rom operasjonsstue3 = new Rom("Operasjonsstue 3",
@@ -54,10 +55,6 @@ public class Main {
 
         operasjonsstue7.gaaInn(helt);
 
-        Monster rottebarn = operasjonsstue7.monstre().get(1);
-        int skade = helt.angrip(rottebarn);
-        System.out.println("Du gjør " + skade + " skade. "
-                + rottebarn + " har " + rottebarn.hp() + " hp igjen.");
 
         List<Rom> verden = List.of(operasjonsstue7);
         System.out.println("Rom i verdenen: " + verden.size());
@@ -66,6 +63,12 @@ public class Main {
         Map<String, BiConsumer<Helt, Rom>> kommandoer = new HashMap<>();
         kommandoer.put("angrip", (h, r) -> r.angripFoerste(h));
         kommandoer.put("se", (h, r) -> r.visInnhold());
+        kommandoer.put("finn", (h, r) ->
+                System.out.println("I live i rommet: " + r.finn(Angripbar::lever)));
+        kommandoer.put("finnmedmaxhp", (h, r) ->
+                System.out.println("I live i rommet med max hp: "
+                        + r.finn(a -> a.maxHP() == a.hp())));
+        // alt som lever som har max hp
 
         BiConsumer<Helt, Rom> ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
 

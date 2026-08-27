@@ -2,10 +2,11 @@ package no.hvl.dat108.spill;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class Rom {
     private final String navn;
-    private final List<Monster> monstre = new ArrayList<>();
     private final List<Angripbar> angripbare = new ArrayList<>();
     private final List<Skatt> skatter = new ArrayList<>();
     private final Hendelse vedInngang;
@@ -15,7 +16,6 @@ public class Rom {
         this.vedInngang = vedInngang;
     }
 
-    public void leggTil(Monster m){monstre.add(m);}
     public void leggTil(Skatt s){skatter.add(s);}
     public void leggTil(Angripbar a){angripbare.add(a);}
 
@@ -26,17 +26,22 @@ public class Rom {
     }
 
     public void visInnhold(){
-        System.out.println("Monster her:" + monstre);
+        //System.out.println("Monster her:" + monstre);
+        System.out.println("Angripbare objekter her:" + angripbare);
         System.out.println("Skatter her:" + skatter);
     }
 
+    public List<Angripbar> finn(Predicate<Angripbar> kriterium){
+        return angripbare.stream().filter(kriterium).toList();
+    }
+
     public void angripFoerste(Helt helt){
-        for (Monster m : monstre){
-            if(m.lever()){
-                int skade = helt.angrip(m);
-                System.out.println(helt.navn() + " gjør " + skade + " skade på " + m.navn() + ".");
-                if (!m.lever()){
-                    System.out.println(m.navn() + " er drept.");
+        for (Angripbar a : angripbare){
+            if(a.lever()){
+                int skade = helt.angrip(a);
+                System.out.println(helt.navn() + " gjør " + skade + " skade på " + a.navn() + ".");
+                if (!a.lever()){
+                    System.out.println(a.navn() + " er drept.");
                 }
                 return;
             }
@@ -45,7 +50,7 @@ public class Rom {
         System.out.println("Det er ingenting å angripe her.");
     }
 
-    public List<Monster> monstre() {return monstre;}
+    //public List<Monster> monstre() {return monstre;}
     public List<Angripbar> angripbar() {return angripbare;}
     public List<Skatt> skatter() {return skatter;}
 }

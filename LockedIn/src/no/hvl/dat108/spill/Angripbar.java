@@ -4,4 +4,6 @@ public interface Angripbar {
     void taSkade(int mengde);
     boolean lever();
     String navn();
+    int hp();
+    int maxHP();
 }

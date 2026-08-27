@@ -3,9 +3,11 @@ package no.hvl.dat108.spill;
 public class Monster implements Angripbar{
     private final String navn;
     private int hp;
+    private final int maxHP;
 
     public Monster(String navn, int hp) {
         this.navn = navn;
+        this.maxHP = hp;
         this.hp = hp;
     }
 
@@ -27,6 +29,8 @@ public class Monster implements Angripbar{
     public int hp(){
         return hp;
     }
+
+    public int maxHP(){ return maxHP;}
 
     @Override
     public String toString() {
