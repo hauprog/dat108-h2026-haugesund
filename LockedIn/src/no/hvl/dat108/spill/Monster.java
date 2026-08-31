@@ -26,10 +26,12 @@ public class Monster implements Angripbar{
         return navn;
     }
 
+    @Override
     public int hp(){
         return hp;
     }
 
+    @Override
     public int maxHP(){ return maxHP;}
 
     @Override

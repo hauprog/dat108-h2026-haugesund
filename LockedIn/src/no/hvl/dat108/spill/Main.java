@@ -1,15 +1,11 @@
 package no.hvl.dat108.spill;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public class Main {
     public static void main(String[] args) {
-        Helt helt = new Helt("Ole", 5, () -> 4);
+        Helt helt = new Helt("Ole", 5, () -> new Random().nextInt(6) + 1);
 
         // Oppretter et Rom-objekt ved inline lambda-deklarasjon av Hendelse som argument 2.
         Rom operasjonsstue3 = new Rom("Operasjonsstue 3",
@@ -36,7 +32,7 @@ public class Main {
         int jasonTall = 5;
         int bartekTall = 4;
         // Velger en tilfeldig Hendelse som blir lagt til som argument 2 for Rom-objektet.
-        // Bruker "tertiary operator" for å velge Hendelse ("if this" ? "do this" : "else this")
+        // Bruker "ternary operator" for å velge Hendelse ("if this" ? "do this" : "else this")
         Rom operasjonsstue34 = new Rom("operasjonsstue 34",
                 jasonTall > bartekTall ? doerFryserTilIs : doerRevetNed);
 
@@ -47,6 +43,10 @@ public class Main {
         operasjonsstue7.leggTil(rottedronning);
         operasjonsstue7.leggTil(new Monster("Rottebarn", 9999));
         operasjonsstue7.leggTil(new Skatt("gull som brenner", 250));
+
+        // Legger til objekter i Operasjonsstue 7
+        operasjonsstue7.leggTil(new Skatt("ostekake", Integer.MAX_VALUE));
+        operasjonsstue7.leggTil(new Skatt("gulrotkake", Integer.MAX_VALUE - 1));
 
         Map<String, Skatt> lager = new HashMap<>();
         for (Skatt s : operasjonsstue7.skatter()) {
@@ -68,7 +68,13 @@ public class Main {
         kommandoer.put("finnmedmaxhp", (h, r) ->
                 System.out.println("I live i rommet med max hp: "
                         + r.finn(a -> a.maxHP() == a.hp())));
-        // alt som lever som har max hp
+        kommandoer.put("status", (h, r) -> {
+           List<String> topp3 = r.skatter().stream()
+                   .sorted(Comparator.comparingInt(Skatt::verdi).reversed())
+                   .limit(3)
+                   .map(Skatt::navn)
+                   .toList();
+        });
 
         BiConsumer<Helt, Rom> ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
 

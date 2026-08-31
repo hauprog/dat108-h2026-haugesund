@@ -3,7 +3,6 @@ package no.hvl.dat108.spill;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class Rom {
     private final String navn;
@@ -26,7 +25,6 @@ public class Rom {
     }
 
     public void visInnhold(){
-        //System.out.println("Monster her:" + monstre);
         System.out.println("Angripbare objekter her:" + angripbare);
         System.out.println("Skatter her:" + skatter);
     }
@@ -50,7 +48,6 @@ public class Rom {
         System.out.println("Det er ingenting å angripe her.");
     }
 
-    //public List<Monster> monstre() {return monstre;}
-    public List<Angripbar> angripbar() {return angripbare;}
+    public List<Angripbar> angripbare() {return angripbare;}
     public List<Skatt> skatter() {return skatter;}
 }

@@ -1,4 +1,8 @@
-package no.hvl.dat108.spill;
+package no.hvl.dat108.video;
+
+import no.hvl.dat108.spill.Angripbar;
+import no.hvl.dat108.spill.Monster;
+import no.hvl.dat108.spill.Skatt;
 
 import java.util.ArrayList;
 import java.util.List;
