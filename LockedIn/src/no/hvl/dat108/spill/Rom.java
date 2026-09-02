@@ -2,6 +2,7 @@ package no.hvl.dat108.spill;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class Rom {
@@ -31,6 +32,10 @@ public class Rom {
 
     public List<Angripbar> finn(Predicate<Angripbar> kriterium){
         return angripbare.stream().filter(kriterium).toList();
+    }
+
+    public Optional<Angripbar> finnFoerste(Predicate<Angripbar> kriterium){
+        return angripbare.stream().filter(kriterium).findFirst().or;
     }
 
     public void angripFoerste(Helt helt){
