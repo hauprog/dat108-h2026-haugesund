@@ -35,7 +35,7 @@ public class Rom {
     }
 
     public Optional<Angripbar> finnFoerste(Predicate<Angripbar> kriterium){
-        return angripbare.stream().filter(kriterium).findFirst().or;
+        return angripbare.stream().filter(kriterium).findFirst();
     }
 
     public void angripFoerste(Helt helt){
