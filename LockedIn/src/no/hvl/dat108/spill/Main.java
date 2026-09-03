@@ -74,6 +74,7 @@ public class Main {
                    .limit(3)
                    .map(Skatt::navn)
                    .toList();
+            System.out.println("Topp 3 skatter: " + topp3);
         });
 
         BiConsumer<Helt, Rom> ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
