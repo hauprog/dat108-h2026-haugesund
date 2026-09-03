@@ -4,7 +4,9 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println(Helt.beregnSkade(5, 4) == 14 ? "beregnSkade OK" : "bergSkade FEIL");
+
         Helt helt = new Helt("Ole", 5, () -> new Random().nextInt(6) + 1);
 
         // Oppretter et Rom-objekt ved inline lambda-deklarasjon av Hendelse som argument 2.
@@ -54,7 +56,7 @@ public class Main {
         }
 
         operasjonsstue7.gaaInn(helt);
-
+        //operasjonsstue3.angripFoerste(helt);
 
         List<Rom> verden = List.of(operasjonsstue7);
         System.out.println("Rom i verdenen: " + verden.size());
@@ -80,13 +82,48 @@ public class Main {
         BiConsumer<Helt, Rom> ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
 
 
+        Thread klokke = new Thread(() -> {
+            while (helt.lever()){
+                System.out.println("Lysrøret blinker.");
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        });
 
+        Thread rottetraad = new Thread(() -> {
+            while (helt.lever()){
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    return;
+                }
+
+                operasjonsstue7.finnFoerste(Angripbar::lever).ifPresent(rotte ->{
+                    helt.taSkade(30);
+                    System.out.println(rotte.navn() + " 360-noscoper " + helt.navn() + "under kneet! ("
+                            + helt.hp() + " hp igjen)");
+                });
+            }
+        });
+
+        klokke.start();
+        rottetraad.start();
 
         Scanner inn = new Scanner(System.in);
 
         while(true){
+
+            if(!helt.lever()){
+                System.out.println("You died.");
+                break;
+            }
             System.out.print("> ");
             String kommando = inn.nextLine().trim().toLowerCase();
+
+
 
             if (kommando.equals("q")) {
                 break;
@@ -96,6 +133,10 @@ public class Main {
 
         }
 
+        klokke.interrupt();
+        rottetraad.interrupt();
+        rottetraad.join();
+        System.out.println("Du forlater sukehuset.");
 
     }
 }

@@ -39,18 +39,19 @@ public class Rom {
     }
 
     public void angripFoerste(Helt helt){
-        for (Angripbar a : angripbare){
-            if(a.lever()){
-                int skade = helt.angrip(a);
-                System.out.println(helt.navn() + " gjør " + skade + " skade på " + a.navn() + ".");
-                if (!a.lever()){
-                    System.out.println(a.navn() + " er drept.");
-                }
-                return;
-            }
+        finnFoerste(Angripbar::lever).ifPresentOrElse(
+                a -> {
+                    int skade = helt.angrip(a);
+                    System.out.println(helt.navn() + " gjør " + skade + " skade på " + a.navn() + ".");
+                    if (!a.lever()) {
+                        System.out.println(a.navn() + " er drept.");
+                    }
+                },
+                () -> System.out.println("Det er ingenting å angripe her.")
+        );
 
-        }
-        System.out.println("Det er ingenting å angripe her.");
+
+        //
     }
 
     public List<Angripbar> angripbare() {return angripbare;}

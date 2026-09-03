@@ -20,8 +20,12 @@ public class Helt implements Angripbar {
         this.terning = terning;
     }
 
+    public static int beregnSkade(int styrke, int kast){
+        return styrke * 2 + kast;
+    }
+
     public int angrip(Angripbar offer){
-        int skade = styrke * 2 + terning.getAsInt();
+        int skade = beregnSkade(styrke, terning.getAsInt());
         offer.taSkade(skade);
         return skade;
     }
