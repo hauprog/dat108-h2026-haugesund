@@ -31,12 +31,12 @@ public class Helt implements Angripbar {
     }
 
     @Override
-    public void taSkade(int mengde) {
+    public synchronized void taSkade(int mengde) {
         hp = Math.max(0, hp - mengde);
     }
 
     @Override
-    public boolean lever() {
+    public synchronized boolean lever() {
         return hp > 0;
     }
 
@@ -46,7 +46,7 @@ public class Helt implements Angripbar {
     }
 
     @Override
-    public int hp() {
+    public synchronized int hp() {
         return hp;
     }
 

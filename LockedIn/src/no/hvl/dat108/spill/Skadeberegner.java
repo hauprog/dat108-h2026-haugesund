@@ -3,8 +3,8 @@ package no.hvl.dat108.spill;
 public class Skadeberegner {
     static int totalSkade = 0;
 
-    static void registrer(int skade) {
-        totalSkade += skade;
+    static synchronized void registrer(int skade) {
+        totalSkade +=skade;
     }
 
     public static void main(String[] args) throws InterruptedException {
