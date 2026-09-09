@@ -5,21 +5,11 @@ import java.util.function.BiConsumer;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        System.out.println(Helt.beregnSkade(5, 4) == 14 ? "beregnSkade OK" : "bergSkade FEIL");
 
+        // Oppretter en helt, med en terning gitt som en lambda som implementerer Supplier.
         Helt helt = new Helt("Ole", 5, () -> new Random().nextInt(6) + 1);
 
-        // Oppretter et Rom-objekt ved inline lambda-deklarasjon av Hendelse som argument 2.
-        Rom operasjonsstue3 = new Rom("Operasjonsstue 3",
-                h -> System.out.println("Døren brenner ned bak " + h.navn() + "."));
-
-        // Oppretter et Rom-objekt ved å sende inn en Hendelse-variabel som argument 2
-        // som har fått sin verdi/implementasjon ved hjelp av et lambda-uttrykk.
-        Hendelse noeSomSkjer = h -> System.out.println("Døren knirker bak " + h.navn() + ".");
-        Rom operasjonsstue5 = new Rom("Operasjonsstue 5", noeSomSkjer);
-
-        // Oppretter et Rom-objekt ved å definere en Hendelse som en anonym funksjon i
-        // argument 2.
+        // Oppretter et Rom-objekt ved å definere en Hendelse som en anonym klasse ved å implementere skjer()-funksjonen i argument 2.
         Rom operasjonsstue7 = new Rom("Operasjonsstue 7", new Hendelse() {
             @Override
             public void skjer(Helt h) {
@@ -27,41 +17,44 @@ public class Main {
             }
         });
 
-        // Oppretter to Hendelser som blir definert vha. lambda
-        Hendelse doerFryserTilIs = h -> System.out.println("Døren fryser til is og blir stengt bak " + h.navn() +".");
-        Hendelse doerRevetNed = h -> System.out.println("Døren blir revet ned og faller av hengslene bak " + h.navn() +".");
-        // To tilfeldige tall valgt blant klassen (kan bruke Random-biblioteket for tilfeldige tall hver gang.
-        int jasonTall = 5;
-        int bartekTall = 4;
-        // Velger en tilfeldig Hendelse som blir lagt til som argument 2 for Rom-objektet.
-        // Bruker "ternary operator" for å velge Hendelse ("if this" ? "do this" : "else this")
-        Rom operasjonsstue34 = new Rom("operasjonsstue 34",
-                jasonTall > bartekTall ? doerFryserTilIs : doerRevetNed);
-
+        // Oppretter monstre
         Monster rottekonge = new Monster("Rottekonge", 20);
         Monster rottedronning = new Monster("Rottedronning", 500);
+        Monster rottebarn = new Monster("Rottebarn", 9999);
 
+        // Legger monstre til i rommet
         operasjonsstue7.leggTil(rottekonge);
         operasjonsstue7.leggTil(rottedronning);
-        operasjonsstue7.leggTil(new Monster("Rottebarn", 9999));
-        operasjonsstue7.leggTil(new Skatt("gull som brenner", 250));
+        operasjonsstue7.leggTil(rottebarn);
 
-        // Legger til objekter i Operasjonsstue 7
+        // Oppretter og legger til skatter i rommet direkte som argument
+        operasjonsstue7.leggTil(new Skatt("gull som brenner", 250));
         operasjonsstue7.leggTil(new Skatt("ostekake", Integer.MAX_VALUE));
         operasjonsstue7.leggTil(new Skatt("gulrotkake", Integer.MAX_VALUE - 1));
 
+        // Oppretter et lager for skatter og legger så alle skattene inn.
         Map<String, Skatt> lager = new HashMap<>();
         for (Skatt s : operasjonsstue7.skatter()) {
             lager.put(s.navn(), s);
         }
 
+        // Alt er klart og helten går nå inn i rommet
         operasjonsstue7.gaaInn(helt);
-        //operasjonsstue3.angripFoerste(helt);
 
+        // Vi lager en liste over alle rommene, for senere bruk (og for repetisjon av List.of())
         List<Rom> verden = List.of(operasjonsstue7);
-        System.out.println("Rom i verdenen: " + verden.size());
 
+        // Skriver ut skatten med lengst navn i verdenen. Trenger flatMap fordi det er snakk om lister i liste.
+        Optional<String> lengst = verden.stream()
+                .flatMap(r -> r.skatter().stream())
+                .map(Skatt::navn)
+                .reduce((a, b) -> a.length() >= b.length() ? a : b);
+        System.out.println("Lengste skattenavn i sykehuset: " + lengst.orElse("ingen"));
 
+        // Vi lager et Map av kommandoer, hvor nøkkelen er kommandoen gitt som tekststreng
+        // og selve handlingen knyttet til kommandoen blir definert som en BiConsumer
+        // som tar inn helten og rommet helten er i, for så å gjøre noe med dette.
+        // Helten kunne fått Rom som en feltvariabel, og vi kunne da heller hatt en Consumer.
         Map<String, BiConsumer<Helt, Rom>> kommandoer = new HashMap<>();
         kommandoer.put("angrip", (h, r) -> r.angripFoerste(h));
         kommandoer.put("se", (h, r) -> r.visInnhold());
@@ -70,6 +63,7 @@ public class Main {
         kommandoer.put("finnmedmaxhp", (h, r) ->
                 System.out.println("I live i rommet med max hp: "
                         + r.finn(a -> a.maxHP() == a.hp())));
+        kommandoer.put("rapport", (h, r) -> System.out.println(r.rapport()));
         kommandoer.put("status", (h, r) -> {
            List<String> topp3 = r.skatter().stream()
                    .sorted(Comparator.comparingInt(Skatt::verdi).reversed())
@@ -79,10 +73,12 @@ public class Main {
             System.out.println("Topp 3 skatter: " + topp3);
         });
 
+        // Oppretter en separat kommando som vil bli brukt som en default-verdi, som vi sender inn som eget
+        // argument, som vil bli brukt om ingen verdi i "kommandoer" matcher.
         BiConsumer<Helt, Rom> ugyldigKommando = (h, r) -> System.out.println("Ugyldig kommando");
 
-
-        Thread klokke = new Thread(() -> {
+        // Oppretter en tråd som skal skape atmosfære i rommet ved å fortelle om bakgrunnsaktivitet.
+        Thread atmosfaere = new Thread(() -> {
             while (helt.lever()){
                 System.out.println("Lysrøret blinker.");
                 try {
@@ -93,6 +89,8 @@ public class Main {
             }
         });
 
+        // Oppretter en tråd som skal sørge for at rottene angriper helten, samtidig som man kan utføre
+        // kommandoer i main-tråden uten å bli avbrutt.
         Thread rottetraad = new Thread(() -> {
             while (helt.lever()){
                 try {
@@ -102,18 +100,21 @@ public class Main {
                 }
 
                 operasjonsstue7.finnFoerste(Angripbar::lever).ifPresent(rotte ->{
-                    helt.taSkade(30);
-                    System.out.println(rotte.navn() + " 360-noscoper " + helt.navn() + "under kneet! ("
+                    helt.taSkade(3);
+                    System.out.println(rotte.navn() + " 360-noscoper " + helt.navn() + " under kneet! ("
                             + helt.hp() + " hp igjen)");
                 });
             }
         });
 
-        klokke.start();
+        // Starter trådene - merk start(), ikke run()
+        atmosfaere.start();
         rottetraad.start();
 
+        // Oppretter et Scanner-objekt som skal bli brukt til å lese inndata.
         Scanner inn = new Scanner(System.in);
 
+        // Starter en løkke som skal håndtere spillflyten
         while(true){
 
             if(!helt.lever()){
@@ -123,20 +124,17 @@ public class Main {
             System.out.print("> ");
             String kommando = inn.nextLine().trim().toLowerCase();
 
-
-
             if (kommando.equals("q")) {
                 break;
             }
             kommandoer.getOrDefault(kommando, ugyldigKommando).accept(helt, operasjonsstue7);
-
-
         }
 
-        klokke.interrupt();
+        // Avbryter trådene, venter på rottetråd, og skriver ut avslutningsmelding
+        atmosfaere.interrupt();
         rottetraad.interrupt();
         rottetraad.join();
-        System.out.println("Du forlater sukehuset.");
+        System.out.println("Du forlater sykehuset.");
 
     }
 }

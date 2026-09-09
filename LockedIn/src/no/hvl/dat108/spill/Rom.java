@@ -2,8 +2,10 @@ package no.hvl.dat108.spill;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import static java.util.stream.Collectors.*;
 
 public class Rom {
     private final String navn;
@@ -49,11 +51,23 @@ public class Rom {
                 },
                 () -> System.out.println("Det er ingenting å angripe her.")
         );
-
-
-        //
     }
+
+    public String navn() { return navn;}
 
     public List<Angripbar> angripbare() {return angripbare;}
     public List<Skatt> skatter() {return skatter;}
+
+    public String rapport() {
+        Map<Boolean, List<Angripbar>> deling = angripbare.stream()
+                .collect(partitioningBy(Angripbar::lever));
+
+        String skattenavn = skatter.stream()
+                .map(Skatt::navn)
+                .collect(joining(", "));
+
+        return "Lever:   " + deling.get(true) + "\n"
+                + "Døde:    " + deling.get(false) + "\n"
+                + "Skatter: " + skattenavn;
+    }
 }
