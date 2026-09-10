@@ -51,12 +51,31 @@ public class Main {
                 .reduce((a, b) -> a.length() >= b.length() ? a : b);
         System.out.println("Lengste skattenavn i sykehuset: " + lengst.orElse("ingen"));
 
+        Journal journal = new Journal();
+
+        Thread journalfoerer = new Thread(() -> {
+            while (true){
+                try {
+                    System.out.println("[journal]" + journal.taUt());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        journalfoerer.setDaemon(true);
+        journalfoerer.start();
+
         // Vi lager et Map av kommandoer, hvor nøkkelen er kommandoen gitt som tekststreng
         // og selve handlingen knyttet til kommandoen blir definert som en BiConsumer
         // som tar inn helten og rommet helten er i, for så å gjøre noe med dette.
         // Helten kunne fått Rom som en feltvariabel, og vi kunne da heller hatt en Consumer.
         Map<String, BiConsumer<Helt, Rom>> kommandoer = new HashMap<>();
-        kommandoer.put("angrip", (h, r) -> r.angripFoerste(h));
+        kommandoer.put("angrip", (h, r) -> {
+                    r.angripFoerste(h);
+                    journal.registrer("Ole", 1);
+                });
+
+
         kommandoer.put("se", (h, r) -> r.visInnhold());
         kommandoer.put("finn", (h, r) ->
                 System.out.println("I live i rommet: " + r.finn(Angripbar::lever)));
@@ -138,3 +157,4 @@ public class Main {
 
     }
 }
+

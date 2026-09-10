@@ -10,6 +10,7 @@ public class Journal {
     public synchronized void registrer(String rotte, int skade) {
         totalSkade += skade;
         handlinger.add(rotte + ": " + skade);
+        notifyAll();
     }
 
     public synchronized int totalSkade() {
@@ -21,7 +22,10 @@ public class Journal {
     }
 
     // Neste hendelse, eller null hvis journalen er tom. Byttes ut i steg 2.
-    public synchronized String taUt() {
-        return handlinger.isEmpty() ? null : handlinger.remove(0);
+    public synchronized String taUt() throws InterruptedException{
+        while (handlinger.isEmpty()){
+            wait();
+        }
+        return handlinger.removeFirst();
     }
 }
