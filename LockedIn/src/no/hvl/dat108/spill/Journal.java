@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Journal {
+    private static final int KAPASITET = 5;
+
     private int totalSkade = 0;
     private final List<String> handlinger = new ArrayList<>();
 
-    public synchronized void registrer(String rotte, int skade) {
+    // Produsenten: legg inn, og si fra. Venter hvis journalen er full.
+    public synchronized void registrer(String rotte, int skade) throws InterruptedException {
+        while (handlinger.size() >= KAPASITET) {
+            wait();                          // full: vent til noen tar ut
+        }
         totalSkade += skade;
         handlinger.add(rotte + ": " + skade);
-        notifyAll();
+        notifyAll();                         // vekk alle i venterommet
     }
 
     public synchronized int totalSkade() {
@@ -21,11 +27,13 @@ public class Journal {
         return new ArrayList<>(handlinger);
     }
 
-    // Neste hendelse, eller null hvis journalen er tom. Byttes ut i steg 2.
-    public synchronized String taUt() throws InterruptedException{
-        while (handlinger.isEmpty()){
-            wait();
+    // Konsumenten: ta ut, og si fra. Venter hvis journalen er tom.
+    public synchronized String taUt() throws InterruptedException {
+        while (handlinger.isEmpty()) {
+            wait();                          // tom: vent til noen legger inn
         }
-        return handlinger.removeFirst();
+        String neste = handlinger.remove(0);
+        notifyAll();                         // noen kan vente på plass
+        return neste;
     }
 }

@@ -53,17 +53,24 @@ public class Main {
 
         Journal journal = new Journal();
 
+        // Journaltråden: konsumenten. Sover i taUt til noen legger inn.
         Thread journalfoerer = new Thread(() -> {
-            while (true){
-                try {
-                    System.out.println("[journal]" + journal.taUt());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            try {
+                while (true) {
+                    System.out.println("[journal] " + journal.taUt());
                 }
+            } catch (InterruptedException e) {
+                return;   // vekket for å avslutte
             }
         });
         journalfoerer.setDaemon(true);
         journalfoerer.start();
+
+        // Lydtråden: samme mønster som journalen, med BlockingQueue. Daemon, så den ikke holder JVM i live.
+        Lyd lyd = new Lyd();
+        Thread lydtraad = new Thread(lyd, "lyd");
+        lydtraad.setDaemon(true);
+        lydtraad.start();
 
         // Vi lager et Map av kommandoer, hvor nøkkelen er kommandoen gitt som tekststreng
         // og selve handlingen knyttet til kommandoen blir definert som en BiConsumer
@@ -71,11 +78,9 @@ public class Main {
         // Helten kunne fått Rom som en feltvariabel, og vi kunne da heller hatt en Consumer.
         Map<String, BiConsumer<Helt, Rom>> kommandoer = new HashMap<>();
         kommandoer.put("angrip", (h, r) -> {
-                    r.angripFoerste(h);
-                    journal.registrer("Ole", 1);
-                });
-
-
+            r.angripFoerste(h);
+            lyd.spill(880);
+        });
         kommandoer.put("se", (h, r) -> r.visInnhold());
         kommandoer.put("finn", (h, r) ->
                 System.out.println("I live i rommet: " + r.finn(Angripbar::lever)));
@@ -84,11 +89,11 @@ public class Main {
                         + r.finn(a -> a.maxHP() == a.hp())));
         kommandoer.put("rapport", (h, r) -> System.out.println(r.rapport()));
         kommandoer.put("status", (h, r) -> {
-           List<String> topp3 = r.skatter().stream()
-                   .sorted(Comparator.comparingInt(Skatt::verdi).reversed())
-                   .limit(3)
-                   .map(Skatt::navn)
-                   .toList();
+            List<String> topp3 = r.skatter().stream()
+                    .sorted(Comparator.comparingInt(Skatt::verdi).reversed())
+                    .limit(3)
+                    .map(Skatt::navn)
+                    .toList();
             System.out.println("Topp 3 skatter: " + topp3);
         });
 
@@ -118,10 +123,14 @@ public class Main {
                     return;
                 }
 
-                operasjonsstue7.finnFoerste(Angripbar::lever).ifPresent(rotte ->{
+                operasjonsstue7.finnFoerste(Angripbar::lever).ifPresent(rotte -> {
                     helt.taSkade(3);
-                    System.out.println(rotte.navn() + " 360-noscoper " + helt.navn() + " under kneet! ("
-                            + helt.hp() + " hp igjen)");
+                    lyd.spill(220);
+                    try {
+                        journal.registrer(rotte.navn(), 3);          // leverer til journalen
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();          // behold avbruddet, løkken ser det
+                    }
                 });
             }
         });
@@ -152,9 +161,10 @@ public class Main {
         // Avbryter trådene, venter på rottetråd, og skriver ut avslutningsmelding
         atmosfaere.interrupt();
         rottetraad.interrupt();
+        journalfoerer.interrupt();
+        lydtraad.interrupt();
         rottetraad.join();
         System.out.println("Du forlater sykehuset.");
 
     }
 }
-
