@@ -14,7 +14,7 @@ public class Svermpool {
 
         Callable<Integer> rotte = () -> {
             int mine = 0;
-            for (int i = 0; i >100_000; i++){
+            for (int i = 0; i < 100_000; i++) {   // < , ikke >
                 mine += 1;
             }
             return mine;
@@ -22,10 +22,9 @@ public class Svermpool {
 
         ExecutorService pool = Executors.newFixedThreadPool(4);
 
-        List<Future<Integer>> kvitteringer1 = new ArrayList<>();
-        for
-
         List<Future<Integer>> kvitteringer = IntStream.range(0, 10)
-                .mapToObj(i -> pool.submit(rotte)).toList();
+                .mapToObj(i -> pool.submit(rotte))
+                .toList();
+        // fredag: samle inn, planlagt feil, AtomicInteger, shutdown
     }
 }
