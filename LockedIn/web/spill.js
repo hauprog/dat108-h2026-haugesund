@@ -1,15 +1,22 @@
+"use strict";
+
 // LockedIn i nettleseren. Alt skjer i konsollen (F12) inntil videre:
 // utfoer("angrip"), utfoer("rapport"), utfoer("status"), utfoer("hjelp").
 //
-// Tag F11-foer-timen: tilstand fra F10, pluss det vi ikke rakk i F10
-// (angrip, rapport, kommandoer, utfoer, rottetimeren) og fasiten paa
-// Deres spill fra F10 (taSkade, lever, finnFoerste, status).
+// Tag F12-foer-timen (og F13-foer-timen): fasit paa torsdagsoppgaven
+// 24. september del 1 til 3, pluss "use strict" oeverst.
 
 console.log("Du er i: Operasjonsstue 7");
 
+// ---- Terningen som closure (torsdagsoppgaven del 2) ----
+
+function lagTerning(sider) {
+    return () => Math.floor(Math.random() * sider) + 1;
+}
+
 // Hele spillets tilstand i ett objekt. Det er Sykehus.standard() uten klasser.
 const tilstand = {
-    helt: { navn: "Ole", hp: 100, styrke: 5 },
+    helt: { navn: "Ole", hp: 100, styrke: 5, terning: lagTerning(6) },
     angripbare: [
         { navn: "Rottekonge", hp: 20 },
         { navn: "Rottedronning", hp: 500 },
@@ -23,7 +30,7 @@ const tilstand = {
     ]
 };
 
-// ---- Angripbar, som funksjoner i stedet for et grensesnitt (Deres spill 1) ----
+// ---- Angripbar, som funksjoner i stedet for et grensesnitt ----
 
 function taSkade(a, mengde) {
     a.hp = Math.max(0, a.hp - mengde);
@@ -33,70 +40,67 @@ function lever(a) {
     return a.hp > 0;
 }
 
-// Rom.finnFoerste(Predicate) fra Java. find gir elementet, eller undefined (Deres spill 2)
+// Rom.finnFoerste(Predicate) fra Java. find gir elementet, eller undefined
 function finnFoerste(kriterium) {
     return tilstand.angripbare.find(kriterium);
 }
 
-// ---- Beregning: rene funksjoner ----
+// ---- Beregning: ren funksjon ----
 
 function beregnSkade(styrke, kast) {
     return styrke * 2 + kast;
 }
 
-const kast = () => Math.floor(Math.random() * 6) + 1;   // Supplier uten typen
+// ---- Handlinger: tar (helt, rom), som BiConsumer<Helt, Rom> (del 1) ----
 
-// ---- Handlinger ----
-
-function angrip() {
+function angrip(helt, rom) {
     const rotte = finnFoerste(lever);
     if (!rotte) {                                   // undefined er usann
         console.log("Det er ingenting å angripe her.");
         return;
     }
-    const skade = beregnSkade(tilstand.helt.styrke, kast());
+    const skade = beregnSkade(helt.styrke, helt.terning());
     taSkade(rotte, skade);
-    console.log(`${tilstand.helt.navn} gjør ${skade} skade på ${rotte.navn}.`);
+    console.log(`${helt.navn} gjør ${skade} skade på ${rotte.navn}.`);
     if (!lever(rotte)) {
         console.log(`${rotte.navn} er drept.`);
     }
 }
 
-function rapport() {
-    const levende = tilstand.angripbare.filter(lever).map(a => a.navn);
-    const doede = tilstand.angripbare.filter(a => !lever(a)).map(a => a.navn);
-    const skatter = tilstand.skatter.map(s => s.navn).join(", ");
+function rapport(rom) {
+    const levende = rom.angripbare.filter(lever).map(a => a.navn);
+    const doede = rom.angripbare.filter(a => !lever(a)).map(a => a.navn);
+    const skatter = rom.skatter.map(s => s.navn).join(", ");
     console.log(`Lever:   ${levende}`);
     console.log(`Døde:    ${doede}`);
     console.log(`Skatter: ${skatter}`);
 }
 
-// De tre mest verdifulle skattene (Deres spill 3). Kopi foer sort, fordi sort endrer arrayet,
-// og comparator, fordi sort() uten sorterer som strenger. Begge deler forklares i F12.
-function status() {
-    const topp3 = [...tilstand.skatter]
+function status(rom) {
+    const topp3 = [...rom.skatter]                  // kopi: sort endrer paa stedet
         .sort((a, b) => b.verdi - a.verdi)
         .slice(0, 3)
         .map(s => s.navn);
     console.log(`Topp 3 skatter: ${topp3}`);
 }
 
-// ---- Kommandotolken fra F03: et objekt der verdiene er funksjoner ----
+// ---- Kommandotolken: et objekt der verdiene er funksjoner ----
 
 const kommandoer = {
-    angrip: angrip,
-    rapport: rapport,
-    status: status,
-    se: () => console.log(tilstand)
+    angrip: (helt, rom) => angrip(helt, rom),
+    rapport: (helt, rom) => rapport(rom),
+    se: (helt, rom) => console.log(rom),
+    status: (helt, rom) => status(rom),
+    hjelp: (helt, rom) => console.log("Kommandoer: " + Object.keys(kommandoer).join(", "))
 };
 
 function utfoer(ord) {
-    const kommando = kommandoer[ord];           // undefined hvis ordet ikke finnes, uten feil
+    const kommando = kommandoer[ord];           // undefined hvis ordet ikke finnes
     if (!kommando) {
         console.log("Ugyldig kommando: " + ord);
         return;
     }
-    kommando();
+    kommando(tilstand.helt, tilstand);          // rommet er hele tilstanden inntil videre
 }
 
 // ---- Rottene biter hvert tredje sekund. Én tråd. Hvordan? F14. ----
