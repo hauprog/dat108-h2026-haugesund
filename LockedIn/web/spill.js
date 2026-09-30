@@ -1,10 +1,7 @@
 "use strict";
 
-// LockedIn i nettleseren. Alt skjer i konsollen (F12) inntil videre:
-// utfoer("angrip"), utfoer("rapport"), utfoer("status"), utfoer("hjelp").
-//
-// Tag F12-foer-timen (og F13-foer-timen): fasit paa torsdagsoppgaven
-// 24. september del 1 til 3, pluss "use strict" oeverst.
+// LockedIn i nettleseren.
+// Status etter F13.
 
 console.log("Du er i: Operasjonsstue 7");
 
@@ -102,6 +99,20 @@ function utfoer(ord) {
     }
     kommando(tilstand.helt, tilstand);          // rommet er hele tilstanden inntil videre
 }
+
+const vaapen = document.getElementById("vaapen");
+const siderFelt = vaapen.querySelector("input");
+const kastKnapp = vaapen.querySelector("button");
+const resultat = vaapen.querySelector("span");
+
+function rullTerning(){
+    const sider = Number(siderFelt.value);
+    tilstand.helt.terning = lagTerning(sider);
+    resultat.textContent = tilstand.helt.terning();
+}
+
+kastKnapp.addEventListener("click", rullTerning);
+
 
 // ---- Rottene biter hvert tredje sekund. Én tråd. Hvordan? F14. ----
 
