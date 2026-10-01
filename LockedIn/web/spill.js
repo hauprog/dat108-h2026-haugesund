@@ -125,3 +125,25 @@ setInterval(() => {
 }, 3000);
 
 console.log('Skriv utfoer("angrip") i konsollen.');
+
+class Bygger{
+    #skjema;
+    #kropp;
+
+    constructor(rot) {
+        this.#skjema = rot.querySelector("[data-nytt-monster]");
+        this.#kropp = rot.querySelector("tbody");
+        this.#skjema.addEventListener("submit", this.leggTil.bind(this));
+    }
+
+    leggTil(hendelse){
+        hendelse.preventDefault();
+        const navn = this.#skjema.elements.navn.value;
+        const hp = Number(this.#skjema.elements.hp.value);
+        const monster = { navn, hp};
+        tilstand.angripbare.push(monster);
+        this.#skjema.reset();
+    }
+}
+
+new Bygger(document.getElementById("bygg"));

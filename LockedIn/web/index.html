@@ -8,12 +8,26 @@
 </head>
 <body>
     <h1>LockedIn</h1>
+
     <button type="button" id="lyd">Lyd</button>
     <fieldset id="vaapen">
         <legend>Kast terning for å gjøre skade.</legend>
         <label>Sider <input type="number" value="6" min="1" max="20"></label>
         <button type="button">Kast</button>
         <p>Resultat : <span></span></p>
+    </fieldset>
+
+    <fieldset id="bygg">
+        <legend>Sykehusgenerator</legend>
+        <form data-nytt-monster>
+            <label>Navn <input name="navn" required></label>
+            <label>Hp <input name="hp" min="1" type="number" required></label>
+            <button data-submit-button>Press me</button>
+        </form>
+        <table>
+            <thead><tr><th>Navn</th><th>Hp</th><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
     </fieldset>
 </body>
 </html>
