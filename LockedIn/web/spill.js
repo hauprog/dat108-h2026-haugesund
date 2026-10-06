@@ -129,11 +129,18 @@ console.log('Skriv utfoer("angrip") i konsollen.');
 class Bygger{
     #skjema;
     #kropp;
+    #navnFelt;
+    #storBokstavRegel = new RegExp("^[A-ZÆØÅ]");
 
     constructor(rot) {
         this.#skjema = rot.querySelector("[data-nytt-monster]");
         this.#kropp = rot.querySelector("tbody");
         this.#skjema.addEventListener("submit", this.leggTil.bind(this));
+
+        this.#navnFelt = this.#skjema.elements.navn;
+        //this.#navnFelt.addEventListener("input", this.sjekkFelt.bind(this));
+        this.#navnFelt.addEventListener("input", () => this.sjekkFelt(this.#navnFelt.value));
+        this.#navnFelt.reportValidity();
     }
 
     leggTil(hendelse){
@@ -142,8 +149,29 @@ class Bygger{
         const hp = Number(this.#skjema.elements.hp.value);
         const monster = { navn, hp};
         tilstand.angripbare.push(monster);
+        this.#visRad(monster);
         this.#skjema.reset();
     }
+
+    #visRad(monster){
+        const rader = [...this.#kropp.rows];
+        const i = rader.findIndex(r => Number(r.cells[1].textContent) < monster.hp);
+        const rad = this.#kropp.insertRow(i);
+        rad.insertCell().textContent = monster.navn;
+        rad.insertCell().textContent = monster.hp;
+
+        const knapp = document.createElement("button");
+        knapp.type = "button";
+        knapp.textContent = "Fjern";
+        rad.insertCell().append(knapp);
+        rad.dataset.navn = monster.navn;
+    }
+
+    sjekkFelt(verdi){
+        const ok  = this.#storBokstavRegel.test(verdi);
+        this.#navnFelt.setCustomValidity(ok ? "" : "Navnet må ha stor forbokstav.");
+    }
+
 }
 
 new Bygger(document.getElementById("bygg"));
