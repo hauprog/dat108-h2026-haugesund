@@ -1,4 +1,4 @@
-package no.hvl.dat108.spill;
+package no.hvl.dat108.lockedin_app.spill;
 
 import java.util.Random;
 import java.util.function.IntSupplier;

@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title th:text="${rom.navn}">Rom</title>
 </head>
 <body>
-$END$
+<h1 th:text="${rom.navn}">Romnavn</h1>
+
+<p>Du er i [[${rom.navn}]]. Her er det
+  [[${rom.angripbare.size()}]] angripbare.</p>
+
+<table>
+  <thead>
+  <tr><th>#</th><th>Navn</th><th>Hp</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+  <tr th:each="m, stat : ${rom.angripbare}">
+    <td th:text="${stat.count}">1</td>
+    <td th:text="${m.navn}">Rottekonge</td>
+    <td th:text="${m.hp}">20</td>
+    <td th:text="${m.lever} ? 'lever' : 'drept'">lever</td>
+  </tr>
+  </tbody>
+</table>
+<p th:if="${rom.angripbare.isEmpty()}">Ingen her.</p>
+
 </body>
 </html>

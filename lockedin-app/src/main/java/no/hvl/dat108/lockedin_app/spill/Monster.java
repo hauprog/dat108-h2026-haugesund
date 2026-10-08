@@ -1,4 +1,4 @@
-package no.hvl.dat108.spill;
+package no.hvl.dat108.lockedin_app.spill;
 
 public class Monster implements Angripbar{
     private final String navn;
