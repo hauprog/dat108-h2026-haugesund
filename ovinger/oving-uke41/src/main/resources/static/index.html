@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Øving uke 41</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 40em; margin: 2em auto; padding: 0 1em; line-height: 1.5; }
+        code { background: #f1ebdd; padding: 0 .3em; border-radius: 3px; }
+        li { margin: .4em 0; }
+    </style>
+</head>
+<body>
+<h1>Øving uke 41</h1>
+<p>Serveren kjører. Klikk deg gjennom oppgavene. Får du en feilside med
+<code>404</code>, finnes ikke stien enda. Husk Ctrl+F9 (bygg) etter endringer.</p>
+<ul>
+    <li>Eksempel: <a href="/hei?navn=Ole">/hei?navn=Ole</a></li>
+    <li>Oppgave 1: <a href="/terning">/terning</a>, <a href="/terning?sider=20">/terning?sider=20</a></li>
+    <li>Oppgave 2: <a href="/rop?tekst=hei&amp;ganger=3">/rop?tekst=hei&amp;ganger=3</a>, <a href="/rop">/rop</a> (skal gi 400)</li>
+    <li>Oppgave 3: <a href="/api/skatter">/api/skatter</a></li>
+    <li>Oppgave 4: <a href="/api/skatter/dyreste">/api/skatter/dyreste</a></li>
+    <li>Oppgave 5: <a href="/api/skatter/sok?min=100">/api/skatter/sok?min=100</a>, <a href="/api/skatter/sok">/api/skatter/sok</a></li>
+    <li>Oppgave 6: <a href="/api/helt">/api/helt</a></li>
+</ul>
+<p>Åpne F12 og Network-fanen, og se på statuskoden og <code>Content-Type</code> for hver av dem.</p>
+</body>
+</html>
