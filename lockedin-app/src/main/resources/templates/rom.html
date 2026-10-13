@@ -25,5 +25,15 @@
 </table>
 <p th:if="${rom.angripbare.isEmpty()}">Ingen her.</p>
 
+<h2>Skatter</h2>
+<ul>
+  <li th:each="s : ${rom.skatter}"
+      th:text="|${s.navn} (${s.verdi})|">skatt (8)</li>
+</ul>
+
+<p><a th:href="@{/}">Tilbake til spillet</a></p>
+
+
+
 </body>
 </html>
