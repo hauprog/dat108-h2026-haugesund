@@ -1,6 +1,6 @@
 package no.hvl.dat108.oving;
 
-// Helten fra LockedIn, uten terning. Legg merke til  at metodenavnene er
+// Helten fra LockedIn, uten terning. Legg merke til at metodenavnene er
 // navn() og hp(), ikke getNavn() og getHp(). Dette har betydning i oppgave 6.
 public class Helt {
     private final String navn;
