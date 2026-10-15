@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
@@ -32,6 +34,15 @@ public class RomController {
     @GetMapping("/rom")
     public String gammelAdresse(){
         return "redirect:/rom/7";
+    }
+
+    @PostMapping("/rom/{nr}/monstre")
+    public String nyttMonster(@PathVariable int nr,
+                              @RequestParam String navn,
+                              @RequestParam int hp,
+                              Model model){
+        finnRom(nr).leggTil(new Monster(navn, hp));
+        return "redirect:/rom/" + nr;
     }
 
     private Rom finnRom(int nr){

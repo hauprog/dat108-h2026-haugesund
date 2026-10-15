@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.*;
 
 public class Rom {
     private final String navn;
-    private final List<Angripbar> angripbare = new ArrayList<>();
-    private final List<Skatt> skatter = new ArrayList<>();
+    private final List<Angripbar> angripbare = new CopyOnWriteArrayList<>();
+    private final List<Skatt> skatter = new CopyOnWriteArrayList<>();
     private final Hendelse vedInngang;
 
     public Rom(String navn, Hendelse vedInngang) {

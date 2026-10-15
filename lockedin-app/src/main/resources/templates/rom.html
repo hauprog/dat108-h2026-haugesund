@@ -31,6 +31,17 @@
       th:text="|${s.navn} (${s.verdi})|">skatt (8)</li>
 </ul>
 
+<h2>Nytt monster</h2>
+<fieldset>
+  <form th:action="@{/rom/{nr}/monstre(nr=${nr})}" method="post">
+    <label for="navnInput">Navn </label>
+    <input id="navnInput" name="navn" required>
+    <label for="hpInput">HP </label>
+    <input id="hpInput" name="hp" type="number" min="1" required>
+    <button>Legg til</button>
+  </form>
+</fieldset>
+
 <p><a th:href="@{/}">Tilbake til spillet</a></p>
 
 
