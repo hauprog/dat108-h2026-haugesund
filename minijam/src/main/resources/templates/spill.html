@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="no" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minijam</title>
+    <!-- href og src gjør at siden virker også når filen åpnes rett fra disken.
+         Fra serveren bruker Thymeleaf th:href og th:src i stedet. -->
+    <link rel="stylesheet" href="../static/stil.css" th:href="@{/stil.css}">
+</head>
+<body>
+<header>
+    <h1>Myntregn</h1>
+    <p>Rekorden er <strong th:text="${beste}">0</strong> poeng.
+        <a href="toppliste.html" th:href="@{/toppliste}">Se topplisten</a></p>
+</header>
+
+<main>
+    <p id="status">Poeng: 0 | Tid: 30</p>
+    <div id="spill"></div>
+    <p><button id="start">Start</button></p>
+
+    <!-- Punkt 4 (se spill.js): når spillet er over, fyller spill.js inn poengene og viser skjemaet -->
+    <form id="ferdig" th:action="@{/rekorder}" method="post" hidden>
+        <p>Ferdig! Du fikk <strong id="resultat">0</strong> poeng.</p>
+        <input type="hidden" name="poeng" id="poeng" value="0">
+        <label>Navn <input name="navn" required maxlength="20" autocomplete="off"></label>
+        <button>Lagre på topplisten</button>
+    </form>
+</main>
+
+<script src="../static/spill.js" th:src="@{/spill.js}"></script>
+</body>
+</html>

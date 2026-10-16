@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="no" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Topplisten</title>
+    <link rel="stylesheet" href="../static/stil.css" th:href="@{/stil.css}">
+</head>
+<body>
+<header>
+    <h1>Topplisten</h1>
+</header>
+
+<main>
+    <p th:if="${rekorder.isEmpty()}">Ingen rekorder ennå. Bli den første!</p>
+
+    <table th:unless="${rekorder.isEmpty()}">
+        <thead>
+        <tr><th>#</th><th>Navn</th><th>Poeng</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="r, stat : ${rekorder}">
+            <td th:text="${stat.count}">1</td>
+            <td th:text="${r.navn}">Ole</td>
+            <td th:text="${r.poeng}">42</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p><a href="spill.html" th:href="@{/}">Spill igjen</a></p>
+</main>
+</body>
+</html>

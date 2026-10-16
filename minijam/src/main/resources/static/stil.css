@@ -1,0 +1,64 @@
+:root {
+    --bakgrunn: #17130e;
+    --flate: #221c14;
+    --tekst: #e9dfc9;
+    --svak: #a2957c;
+    --gull: #d9a441;
+}
+
+body {
+    margin: 0 auto;
+    max-width: 640px;
+    padding: 1rem;
+    background: var(--bakgrunn);
+    color: var(--tekst);
+    font-family: system-ui, sans-serif;
+}
+
+a { color: var(--gull); }
+
+button {
+    font: inherit;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--gull);
+    border-radius: 4px;
+    background: var(--flate);
+    color: var(--tekst);
+    cursor: pointer;
+}
+
+input {
+    font: inherit;
+    padding: 0.3rem;
+    margin: 0 0.5rem;
+}
+
+#spill {
+    position: relative;
+    height: 360px;
+    background: var(--flate);
+    border: 1px solid var(--svak);
+    border-radius: 6px;
+    overflow: hidden;
+    touch-action: none; /* ingen zoom eller rulling når man trykker på mobil */
+}
+
+.mynt {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffe08a, var(--gull) 60%, #8a6420);
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 0.4rem;
+    border-bottom: 1px solid var(--flate);
+}
