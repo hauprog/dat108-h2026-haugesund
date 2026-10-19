@@ -49,6 +49,11 @@ public class RomController {
                     + "Sjekk navn, hp og tilstand.", model);
         }
 
+        if (finnesAllerede(rom, skjema.getNavn())) {
+            return visRomMedFeil(nr, rom, "Det finnes allerede et monster "
+                    + "som heter " + skjema.getNavn() + " her.", model);
+        }
+
         Monster monster = new Monster(skjema.getNavn(), skjema.getHp());
         if (skjema.getTilstand().equals("skadet")){
             monster.taSkade(skjema.getHp() / 2);
