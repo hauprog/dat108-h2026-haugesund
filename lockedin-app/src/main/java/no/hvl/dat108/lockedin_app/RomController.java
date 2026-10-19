@@ -1,16 +1,16 @@
 package no.hvl.dat108.lockedin_app;
 
+import jakarta.validation.Valid;
 import no.hvl.dat108.lockedin_app.spill.Monster;
 import no.hvl.dat108.lockedin_app.spill.Rom;
 import no.hvl.dat108.lockedin_app.spill.Skatt;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -28,6 +28,7 @@ public class RomController {
     public String rom(@PathVariable int nr, Model model){
         model.addAttribute("nr", nr);
         model.addAttribute("rom", finnRom(nr));
+        model.addAttribute("skjema", new MonsterSkjema());
         return "rom";
     }
 
@@ -38,11 +39,35 @@ public class RomController {
 
     @PostMapping("/rom/{nr}/monstre")
     public String nyttMonster(@PathVariable int nr,
-                              @RequestParam String navn,
-                              @RequestParam int hp,
-                              Model model){
-        finnRom(nr).leggTil(new Monster(navn, hp));
+                              @Valid @ModelAttribute("skjema") MonsterSkjema skjema,
+                              BindingResult feil,
+                              Model model,
+                              RedirectAttributes ra){
+        Rom rom = finnRom(nr);
+        if(feil.hasErrors()){
+            return visRomMedFeil(nr, rom, "Monsteret er ugyldig. "
+                    + "Sjekk navn, hp og tilstand.", model);
+        }
+
+        Monster monster = new Monster(skjema.getNavn(), skjema.getHp());
+        if (skjema.getTilstand().equals("skadet")){
+            monster.taSkade(skjema.getHp() / 2);
+        }
+
+        rom.leggTil(monster);
         return "redirect:/rom/" + nr;
+    }
+
+    private static boolean finnesAllerede(Rom rom, String navn) {
+        return rom.finnFoerste(a -> a.navn().equalsIgnoreCase(navn))
+                .isPresent();
+    }
+
+    private String visRomMedFeil(int nr, Rom rom, String feilmelding, Model model) {
+        model.addAttribute("nr", nr);
+        model.addAttribute("rom", rom);
+        model.addAttribute("feilmelding", feilmelding);
+        return "rom";
     }
 
     private Rom finnRom(int nr){
