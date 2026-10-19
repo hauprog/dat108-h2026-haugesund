@@ -60,6 +60,8 @@ public class RomController {
         }
 
         rom.leggTil(monster);
+
+        ra.addFlashAttribute("melding", monster.navn() + " er lagt til.");
         return "redirect:/rom/" + nr;
     }
 
