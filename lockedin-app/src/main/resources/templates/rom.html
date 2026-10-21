@@ -5,6 +5,12 @@
     <title th:text="${rom.navn}">Rom</title>
 </head>
 <body>
+<form th:if="${session.helt}" th:action="@{/utlogging}" method="post">
+  Innlogget som <b th:text="${session.helt}">Ole</b>
+  <button>Logg ut</button>
+</form>
+<p th:unless="${session.helt}"><a th:href="@{/innlogging}">Logg inn</a></p>
+
 <h1 th:text="${rom.navn}">Romnavn</h1>
 
 <p>Du er i [[${rom.navn}]]. Her er det
@@ -31,11 +37,12 @@
       th:text="|${s.navn} (${s.verdi})|">skatt (8)</li>
 </ul>
 
+<div th:if="${session.helt}">
 <h2>Nytt monster</h2>
 <p th:if="${melding}" th:text="${melding}" style="color: green">Lagt til</p>
 <p th:if="${feilmelding}" th:text="${feilmelding}" style="color: red">Feil</p>
 <fieldset>
-  <form novalidate th:action="@{/rom/{nr}/monstre(nr=${nr})}" th:object="${skjema}"
+  <form th:action="@{/rom/{nr}/monstre(nr=${nr})}" th:object="${skjema}"
         method="post">
     <label for="navn">Navn </label>
     <input id="navn" th:field="*{navn}" required>
@@ -48,6 +55,7 @@
     <button>Legg til</button>
   </form>
 </fieldset>
+</div>
 
 <p><a th:href="@{/}">Tilbake til spillet</a></p>
 

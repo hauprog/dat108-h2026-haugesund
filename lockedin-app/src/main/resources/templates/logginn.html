@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="no" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logg inn</title>
+</head>
+<body>
+<h1>Hvem er du?</h1>
+<p th:if="${melding}" th:text="${melding}" style="color: green">Logget ut</p>
+<p th:if="${feilmelding}" th:text="${feilmelding}" style="color: red">Feil</p>
+<form th:action="@{/innlogging}" method="post">
+  <label>Navn <input name="navn" required></label>
+  <label>Passord <input name="passord" type="password" required></label>
+  <button>Logg inn</button>
+</form>
+<p><a th:href="@{/rom/7}">Til Operasjonsstue 7</a></p>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package no.hvl.dat108.lockedin_app;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import no.hvl.dat108.lockedin_app.spill.Monster;
 import no.hvl.dat108.lockedin_app.spill.Rom;
@@ -42,7 +43,17 @@ public class RomController {
                               @Valid @ModelAttribute("skjema") MonsterSkjema skjema,
                               BindingResult feil,
                               Model model,
-                              RedirectAttributes ra){
+                              RedirectAttributes ra,
+                              HttpSession sesjon){
+        // Skjemaet er skjult for den som ikke er logget inn, men curl
+        // bryr seg ikke om det. Serveren må sjekke selv.
+        String helt = (String) sesjon.getAttribute("helt");
+        if (helt == null) {
+            ra.addFlashAttribute("feilmelding",
+                    "Logg inn for å legge til monstre.");
+            return "redirect:/innlogging";
+        }
+
         Rom rom = finnRom(nr);
         if(feil.hasErrors()){
             return visRomMedFeil(nr, rom, "Monsteret er ugyldig. "
@@ -61,7 +72,8 @@ public class RomController {
 
         rom.leggTil(monster);
 
-        ra.addFlashAttribute("melding", monster.navn() + " er lagt til.");
+        ra.addFlashAttribute("melding", monster.navn() + " er lagt til av "
+                + helt + ".");
         return "redirect:/rom/" + nr;
     }
 
