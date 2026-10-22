@@ -11,6 +11,22 @@ import java.util.List;
 @Controller
 public class HilsenController {
 
+    private final SykehusService sykehus;
+
+    public HilsenController(SykehusService sykehus){
+        this.sykehus = sykehus;
+    }
+
+    @GetMapping("/status")
+    @ResponseBody
+    public String status(){
+        int antall = sykehus.finnRom(7)
+                .map(rom -> rom.angripbare().size())
+                .orElse(0);
+        return "Operasjonsstue 7 har " + antall + " angripbare objekter. "
+                + "(SykehusService " + sykehus.id() + ")";
+    }
+
     @GetMapping("/hei")
     @ResponseBody
     public String hei(@RequestParam(defaultValue = "DU") String navn){

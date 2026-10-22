@@ -18,11 +18,11 @@ import java.util.Map;
 @Controller
 public class RomController {
 
-    //private final Rom rom = lagRom();
-    private final Map<Integer, Rom> rommene = Map.of(
-            7, operasjonsstue7(),
-            3, do3());
+    private final SykehusService sykehus;
 
+    public RomController(SykehusService sykehus){
+        this.sykehus = sykehus;
+    }
 
 
     @GetMapping("/rom/{nr}")
@@ -90,30 +90,10 @@ public class RomController {
     }
 
     private Rom finnRom(int nr){
-        Rom rom = rommene.get(nr);
-        if (rom == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Rom " + nr + " finnes ikke.");
-        }
-        return rom;
+        return sykehus.finnRom(nr).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Rom " + nr + " finnes ikke."));
     }
 
-    private static Rom operasjonsstue7(){
-        Rom rom = new Rom("Operasjonsstue 7", h -> {});
-        Monster rottekonge = new Monster("Rottekonge", 20);
-        rottekonge.taSkade(20);
-        rom.leggTil(rottekonge);
-        rom.leggTil(new Monster("RottekongeSinHammer", 3));
-        rom.leggTil(new Monster("Skrujern", 255));
-        rom.leggTil(new Skatt("mynter", 3));
-        rom.leggTil(new Skatt("lommerusk", 7));
-        return rom;
-    }
 
-    private static Rom do3(){
-        Rom rom = new Rom("Do 3", h -> {});
-        rom.leggTil(new Monster("Beist", 32));
-        rom.leggTil(new Skatt("dorull", 1));
-        return rom;
-    }
 }
