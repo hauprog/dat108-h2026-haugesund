@@ -3,6 +3,7 @@
 *.iml
 *.iws
 out/
+http-client.private.env.json
 
 # Java-bygg
 target/

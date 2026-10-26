@@ -2,32 +2,44 @@
 <html lang="no">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LockedIn</title>
+    <link rel="stylesheet" href="spill.css">
     <script src="lyd.js" defer></script>
     <script src="spill.js" defer></script>
 </head>
 <body>
-    <h1>LockedIn</h1>
+<header class="topp">
+    <div>
+        <p class="sted">LockedIn</p>
+        <h1 id="romnavn">Laster rommet ...</h1>
+    </div>
+    <nav>
+        <button type="button" id="innkall">Innkall et monster</button>
+        <button type="button" id="lydknapp" aria-pressed="false">Lyd av</button>
+        <a href="/rom/7">Bygg monstre</a>
+    </nav>
+</header>
 
-    <button type="button" id="lyd">Lyd</button>
-    <fieldset id="vaapen">
-        <legend>Kast terning for å gjøre skade.</legend>
-        <label>Sider <input type="number" value="6" min="1" max="20"></label>
-        <button type="button">Kast</button>
-        <p>Resultat : <span></span></p>
-    </fieldset>
+<main class="oppsett">
+    <section aria-labelledby="monstre-tittel">
+        <h2 id="monstre-tittel">Monstre</h2>
+        <p class="hint">Klikk på et monster for å angripe det.</p>
+        <div id="arena" class="arena"></div>
+    </section>
 
-    <fieldset id="bygg">
-        <legend>Sykehusgenerator</legend>
-        <form data-nytt-monster>
-            <label>Navn <input name="navn" required></label>
-            <label>Hp <input name="hp" min="1" type="number" required></label>
-            <button data-submit-button>Press me</button>
-        </form>
-        <table>
-            <thead><tr><th>Navn</th><th>Hp</th><th></th></tr></thead>
-            <tbody></tbody>
-        </table>
-    </fieldset>
+    <aside>
+        <section aria-labelledby="skatter-tittel">
+            <h2 id="skatter-tittel">Skatter</h2>
+            <ul id="skatter" class="skatter"></ul>
+        </section>
+        <section aria-labelledby="logg-tittel">
+            <h2 id="logg-tittel">Logg</h2>
+            <ol id="logg" class="logg" aria-live="polite"></ol>
+        </section>
+    </aside>
+</main>
+
+<p id="feil" class="feil" role="alert" hidden></p>
 </body>
 </html>

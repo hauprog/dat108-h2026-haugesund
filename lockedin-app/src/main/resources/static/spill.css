@@ -1,0 +1,204 @@
+/* LockedIn: arenaen. Samme farger som slidene (steinpaletten). */
+
+:root {
+    --stein: #17130e; --stein-lys: #221c14; --sot: #453b2c;
+    --kalk: #e9dfc9; --kalk-svak: #a2957c; --gull: #d9a441;
+    --patina: #8fbfa2; --hav: #7fb3c4; --rust: #cf6444;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 1rem;
+    background: var(--stein);
+    color: var(--kalk);
+    font-family: system-ui, sans-serif;
+}
+
+h1, h2 { font-weight: 500; margin: 0 0 .4rem; }
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.1rem; color: var(--gull); }
+a { color: var(--hav); }
+
+button {
+    font: inherit;
+    color: var(--kalk);
+    background: var(--stein-lys);
+    border: 1px solid var(--sot);
+    border-radius: 6px;
+    padding: .3rem .8rem;
+    cursor: pointer;
+}
+button:hover { border-color: var(--gull); }
+
+/* ---- Toppen ---- */
+
+.topp {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto 1.2rem;
+    border-bottom: 1px solid var(--sot);
+    padding-bottom: .8rem;
+}
+.sted {
+    margin: 0;
+    font-family: ui-monospace, monospace;
+    font-size: .75rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gull);
+}
+.topp nav { display: flex; gap: 1rem; align-items: center; }
+
+/* ---- Oppsettet ---- */
+
+.oppsett {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+@media (max-width: 760px) {
+    .oppsett { grid-template-columns: 1fr; }
+}
+.hint { color: var(--kalk-svak); margin: 0 0 .8rem; font-size: .9rem; }
+
+/* ---- Monstrene ---- */
+
+.arena {
+    position: relative;               /* de flytende tallene plasseres her */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: .8rem;
+}
+
+.monster {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4rem;
+    padding: .9rem .7rem .8rem;
+    background: var(--stein-lys);
+    border: 1px solid var(--sot);
+    border-radius: 10px;
+    text-align: center;
+}
+.monster:hover { border-color: var(--rust); }
+.monster.drept { opacity: .4; cursor: default; }
+.monster.drept:hover { border-color: var(--sot); }
+
+.figur {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+}
+.figur img {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;        /* pikselgrafikk skal være skarp */
+}
+/* Uten bildefil: forbokstaven i en sirkel */
+.merke {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--stein);
+    background: var(--rust);
+}
+.drept .merke { background: var(--kalk-svak); }
+
+.monster .navn { font-weight: 600; overflow-wrap: anywhere; }
+.monster .hptekst {
+    font-family: ui-monospace, monospace;
+    font-size: .8rem;
+    color: var(--kalk-svak);
+}
+
+.hp {
+    display: block;
+    width: 100%;
+    height: 10px;
+    background: var(--sot);
+    border-radius: 5px;
+    overflow: hidden;
+}
+.hp > span {
+    display: block;
+    height: 100%;
+    background: var(--rust);
+    transition: width .25s;
+}
+
+/* ---- Skatter og logg ---- */
+
+.skatter, .logg {
+    list-style: none;
+    margin: 0 0 1.4rem;
+    padding: 0;
+}
+.skatter li {
+    display: flex;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .35rem .6rem;
+    border: 1px solid var(--sot);
+    border-radius: 6px;
+    margin-bottom: .35rem;
+}
+.skatter .verdi { color: var(--gull); font-family: ui-monospace, monospace; }
+.logg li {
+    padding: .2rem 0;
+    border-bottom: 1px solid var(--sot);
+    font-size: .9rem;
+}
+.logg li:first-child { color: var(--kalk); }
+.logg li:not(:first-child) { color: var(--kalk-svak); }
+
+.feil {
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: .6rem .9rem;
+    border: 1px solid var(--rust);
+    border-radius: 6px;
+    color: var(--rust);
+}
+
+/* ---- Juice (fra verktøykassen i minijammen) ---- */
+
+.rist { animation: rist .3s; }
+@keyframes rist {
+    25% { transform: translate(-6px, 2px); }
+    50% { transform: translate(5px, -3px); }
+    75% { transform: translate(-3px, 4px); }
+}
+.blink { animation: blink .1s 3; }
+@keyframes blink { 50% { opacity: .15; } }
+
+.flyt {
+    position: absolute;
+    pointer-events: none;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--gull);
+    text-shadow: 0 2px 0 var(--stein);
+    animation: flyt .8s forwards;
+}
+@keyframes flyt { to { transform: translateY(-50px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .rist, .blink, .flyt { animation: none; }
+    .hp > span {
+    display: block; transition: none; }
+}
