@@ -16,6 +16,6 @@ GET http://localhost:8080/api/rom/7
 ### Vår egen server: et rom som ikke finnes (404)
 GET http://localhost:8080/api/rom/9
 
-### NASA: dagens astronomibilde.
+### NASA: asteroider som passerer jorda i dag.
 # Nøkkelen ligger i http-client.private.env.json, som ikke er i git.
-GET https://api.nasa.gov/planetary/apod?api_key={{nasaNokkel}}
+GET https://api.nasa.gov/neo/rest/v1/feed/today?api_key={{nasaNokkel}}
