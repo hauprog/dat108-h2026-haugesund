@@ -8,16 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Map;
-
 @Controller
 public class InnloggingController {
 
-    // Passord i klartekst i koden er bare for å vise flyten.
-    // Hashing av passord kommer senere i emnet.
-    private static final Map<String, String> HELTER = Map.of(
-            "Ole", "ostekake",
-            "Jonny", "gulrotkake");
+    private final SpillerRepository spillere;
+
+    public InnloggingController(SpillerRepository spillere) {
+        this.spillere = spillere;
+    }
 
     @GetMapping("/innlogging")
     public String innloggingSide() {
@@ -29,7 +27,10 @@ public class InnloggingController {
                           @RequestParam String passord,
                           HttpServletRequest request,
                           RedirectAttributes ra) {
-        if (!passord.equals(HELTER.get(navn))) {
+        boolean riktig = spillere.findByNavn(navn)
+                .map(s -> s.getPassord().equals(passord))
+                .orElse(false);
+        if (!riktig) {
             ra.addFlashAttribute("feilmelding",
                     "Ukjent helt eller feil passord.");
             return "redirect:/innlogging";
@@ -53,3 +54,4 @@ public class InnloggingController {
         return "redirect:/innlogging";
     }
 }
+
