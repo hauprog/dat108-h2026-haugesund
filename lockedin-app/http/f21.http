@@ -8,7 +8,7 @@ GET https://www.dnd5eapi.co/api/2014/monsters/goblin
 GET https://www.dnd5eapi.co/api/2014/monsters/rottekonge
 
 ### D&D: alle monstrene (count og results)
-GET https://www.dnd5eapi.co/api/2014/monsters
+GET https://www.dnd5eapi.co/api/2014/monsters/
 
 ### Vår egen server: rom 7 som JSON
 GET http://localhost:8080/api/rom/7

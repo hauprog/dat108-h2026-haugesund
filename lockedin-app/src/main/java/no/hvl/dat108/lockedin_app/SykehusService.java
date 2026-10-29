@@ -15,7 +15,8 @@ public class SykehusService {
     //private final Rom rom = lagRom();
     private final Map<Integer, Rom> rommene = Map.of(
             7, operasjonsstue7(),
-            3, do3());
+            3, do3(),
+            13, likhuset13());
 
     public SykehusService(){
         System.out.println("Sykehusservice laget: " + id());
@@ -41,6 +42,17 @@ public class SykehusService {
         return rom;
     }
 
+    // Halloween (F22): rom 13, med monstre å legge til og fordrive
+    // gjennom API-et.
+    private static Rom likhuset13(){
+        Rom rom = new Rom("Likhuset", h -> {});
+        rom.leggTil(new Monster("Gresskarhodet", 31));
+        rom.leggTil(new Monster("Spøkelset", 13));
+        rom.leggTil(new Monster("Vampyren", 66));
+        rom.leggTil(new Skatt("godteri", 31));
+        return rom;
+    }
+
     private static Rom do3(){
         Rom rom = new Rom("Do 3", h -> {});
         rom.leggTil(new Monster("Beist", 32));
@@ -48,3 +60,4 @@ public class SykehusService {
         return rom;
     }
 }
+

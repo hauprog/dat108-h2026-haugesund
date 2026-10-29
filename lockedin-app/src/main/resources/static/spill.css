@@ -202,3 +202,31 @@ button:hover { border-color: var(--gull); }
     .hp > span {
     display: block; transition: none; }
 }
+
+/* ---- Halloween (29. oktober til 1. november, eller ?tema=halloween) ---- */
+
+body.halloween {
+    --stein: #120d16; --stein-lys: #1f1626; --sot: #3d2d4a;
+    --kalk: #efe6d8; --kalk-svak: #a898b0; --gull: #ff8a1f;
+    --patina: #9fd88a; --hav: #b796f2; --rust: #e8534a;
+    background:
+        radial-gradient(700px 360px at 85% -80px, rgba(255, 138, 31, .14), transparent 60%),
+        var(--stein);
+    min-height: 100vh;
+}
+body.halloween .merke { background: var(--gull); }
+body.halloween .drept .merke { background: var(--kalk-svak); }
+body.halloween .hp > span { background: var(--patina); }
+
+/* Spindelvev i hjørnet: bare linjer og buer */
+body.halloween::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+    opacity: .2;
+    background: no-repeat top right / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23efe6d8' stroke-width='.8'%3E%3Cpath d='M100 0 L0 0 M100 0 L20 60 M100 0 L55 95 M100 0 L100 100 M100 0 L5 25 M100 0 L85 98'/%3E%3Cpath d='M82 0 Q84 10 100 16'/%3E%3Cpath d='M62 0 Q66 22 100 32'/%3E%3Cpath d='M42 0 Q48 34 100 50'/%3E%3Cpath d='M22 0 Q30 46 100 68'/%3E%3Cpath d='M4 0 Q14 58 100 86'/%3E%3C/svg%3E");
+}

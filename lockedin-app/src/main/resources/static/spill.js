@@ -5,13 +5,22 @@
 // og tegn() som oppdaterer siden ut fra det. Lyd og effekter (juice) er
 // ikke tilstand, og ligger utenfor tegn().
 //
-// Status: api-laget under bruker LOKALE data. Planen videre:
-//   F21: hentRom() henter rommet fra serveren med fetch, og
-//        hentDndMonster() henter et monster fra et åpent API.
-//   F22: angrip() sender POST til serveren, som regner ut skaden.
-//   F23: plukk() og feilmeldinger (statuskoder) fra serveren.
+// Status: hentDndMonster() bruker fetch mot D&D-API-et. hentRom() og
+// nyttMonster() bruker LOKALE data. Planen videre:
+//   F22: hentRom() med GET og nyttMonster() med POST mot vår server.
+//   F23: angrip() sender POST til serveren, som regner ut skaden.
 
-const ROMNR = 7;
+const ROMNR = 13;                               // Likhuset
+
+// Halloween: mørkere farger fra 29. oktober til 1. november, eller med
+// ?tema=halloween i adressen. Bare utseende, ingen tilstand.
+const idag = new Date();
+const erHalloween = (idag.getMonth() === 9 && idag.getDate() >= 29)
+    || (idag.getMonth() === 10 && idag.getDate() === 1);
+if (erHalloween
+        || new URLSearchParams(location.search).get("tema") === "halloween") {
+    document.body.classList.add("halloween");
+}
 
 // ---- Tilstand ----
 
@@ -25,38 +34,62 @@ const tilstand = {
 // Funksjonene er async, så de gir et Promise, akkurat som fetch.
 // Da kan resten av koden være lik når vi bytter til serveren.
 
-// Lokale data, med samme form som JSON-en fra GET /api/rom/7.
+// Lokale data, med samme form som JSON-en fra GET /api/rom/13.
 const lokaltRom = {
-    nr: 7,
-    navn: "Operasjonsstue 7 (lokale data)",
+    nr: 13,
+    navn: "Likhuset (lokale data)",
     monstre: [
-        { navn: "Rottekonge", hp: 0, maxHP: 20, lever: false },
-        { navn: "RottekongeSinHammer", hp: 3, maxHP: 3, lever: true },
-        { navn: "Skrujern", hp: 255, maxHP: 255, lever: true }
+        { navn: "Gresskarhodet", hp: 31, maxHP: 31, lever: true },
+        { navn: "Spøkelset", hp: 13, maxHP: 13, lever: true },
+        { navn: "Vampyren", hp: 66, maxHP: 66, lever: true }
     ],
     skatter: [
-        { navn: "mynter", verdi: 3 },
-        { navn: "lommerusk", verdi: 7 }
+        { navn: "godteri", verdi: 31 }
     ]
 };
+
+const DND = "https://www.dnd5eapi.co";
+
+// Vandøde i D&D-API-et (index i /api/2014/monsters), til Likhuset.
+const VANDOEDE = ["zombie", "skeleton", "ghost", "ghoul", "ghast",
+    "mummy", "wraith", "specter", "shadow", "wight"];
+
+// fetch, sjekk statuskoden, og gjør JSON-en om til objekter.
+async function hentJson(url) {
+    const svar = await fetch(url);
+    if (!svar.ok) {
+        throw new Error(`${svar.status} fra ${url}`);
+    }
+    return svar.json();
+}
 
 function kastTerning(sider) {
     return Math.floor(Math.random() * sider) + 1;
 }
 
 const api = {
-    // F21: GET /api/rom/{nr}
+    // F22: GET /api/rom/{nr}
     async hentRom(nr) {
         return structuredClone(lokaltRom);      // en kopi, som fra serveren
     },
 
-    // F21: et tilfeldig monster fra D&D-API-et (www.dnd5eapi.co),
+    // Et tilfeldig vandødt monster fra D&D-API-et (www.dnd5eapi.co),
     // gjort om til vår form: { navn, hp, maxHP, lever }
     async hentDndMonster() {
-        return { navn: "Goblin", hp: 7, maxHP: 7, lever: true };
+        const i = Math.floor(Math.random() * VANDOEDE.length);
+        const d = await hentJson(`${DND}/api/2014/monsters/${VANDOEDE[i]}`);
+        return { navn: d.name, hp: d.hit_points, maxHP: d.hit_points,
+                 lever: true };
     },
 
-    // F22: POST /api/rom/{nr}/angrep, med navnet på monsteret.
+    // F22: POST /api/rom/{nr}/monstre, med { navn, hp } som JSON.
+    // Svar: 201 Created, og monsteret slik serveren lagret det.
+    // NB: nå sendes monsteret ingen steder. Det finnes bare i denne fanen.
+    async nyttMonster(nr, m) {
+        return m;
+    },
+
+    // F23: POST /api/rom/{nr}/angrep, med navnet på monsteret.
     // Svar: { navn, skade, hp, lever }
     // NB: her regner klienten ut skaden selv. Det er det som skal bort.
     async angrip(nr, navn) {
@@ -238,15 +271,16 @@ async function angrip(navn) {
     }
 }
 
-// Et monster fra D&D-API-et inn i rommet, bare hos oss (ikke på serveren).
+// Et monster fra D&D-API-et inn i rommet, via api.nyttMonster().
 async function innkall() {
     try {
         const m = await api.hentDndMonster();
         if (tilstand.rom.monstre.some(a => a.navn === m.navn)) {
             logg(`${m.navn} er her allerede.`);
         } else {
-            tilstand.rom.monstre.push(m);
-            logg(`${m.navn} dukker opp! (${m.hp} hp)`);
+            const ny = await api.nyttMonster(tilstand.rom.nr, m);
+            tilstand.rom.monstre.push(ny);
+            logg(`${ny.navn} dukker opp! (${ny.hp} hp)`);
         }
         tegn();
         effekt(kort.get(m.navn), "blink", 300);
@@ -258,6 +292,7 @@ async function innkall() {
 }
 
 document.getElementById("innkall").addEventListener("click", innkall);
+document.getElementById("bygg").href = `/rom/${ROMNR}`;
 
 // ---- Lydknappen ----
 

@@ -1,0 +1,47 @@
+# Forespørsler til F22: monstrene i Likhuset (rom 13).
+# Klikk på den grønne pilen ved en forespørsel. Før live-koding 2 gir
+# alle under "Monstrene" 404: API-et finnes ikke ennå.
+
+@rom = http://localhost:8080/api/rom/13
+
+### Hele rommet (finnes fra før, SpillApiController)
+GET {{rom}}
+
+### ---- Monstrene: samlingen og ett element ----
+
+### Alle monstrene i rommet
+GET {{rom}}/monstre
+
+### Ett monster
+GET {{rom}}/monstre/Vampyren
+
+### Et monster som ikke finnes: 404
+GET {{rom}}/monstre/Dracula
+
+### Innkall et monster: 201, Location og monsteret som JSON
+POST {{rom}}/monstre
+Content-Type: application/json
+
+{ "navn": "Heksa", "hp": 40 }
+
+### Fordriv Vampyren: 204 første gang, 404 neste gang
+DELETE {{rom}}/monstre/Vampyren
+
+### ---- Knep ----
+
+### Uten Content-Type: serveren vet ikke at kroppen er JSON (415)
+POST {{rom}}/monstre
+
+{ "navn": "Heksa", "hp": 40 }
+
+### Ugyldig JSON (400): nøkkelen mangler anførselstegn
+POST {{rom}}/monstre
+Content-Type: application/json
+
+{ navn: "Heksa", "hp": 40 }
+
+### Serveren godtar alt som er gyldig JSON. Det rettes i F23.
+POST {{rom}}/monstre
+Content-Type: application/json
+
+{ "navn": "Tomrommet", "hp": -5 }
