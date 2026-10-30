@@ -2,11 +2,19 @@ package no.hvl.dat108.lockedin_app;
 
 import no.hvl.dat108.lockedin_app.spill.Rom;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 // Monstrene i et rom som en REST-ressurs. Fylles ut i live-koding 2 (F22).
 //   samlingen: /api/rom/{nr}/monstre
 //   ett monster: /api/rom/{nr}/monstre/{navn}
+@RestController
+@RequestMapping("/api/rom/{nr}/monstre")
 public class MonsterApiController {
 
     // Det klienten sender med POST. Jackson lager den fra JSON-en.
@@ -19,6 +27,13 @@ public class MonsterApiController {
     }
 
     // GET    samlingen:    200 og alle monstrene
+    @GetMapping
+    public List<RomVisning.MonsterVisning> alle(@PathVariable int nr){
+        return finnRom(nr).angripbare().stream()
+                .map(RomVisning.MonsterVisning::fra)
+                .toList();
+    }
+
     // GET    ett monster:  200 og monsteret, eller 404
     // POST   samlingen:    201, Location og det nye monsteret
     // DELETE ett monster:  204 uten kropp, eller 404

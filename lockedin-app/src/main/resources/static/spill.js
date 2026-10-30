@@ -70,7 +70,11 @@ function kastTerning(sider) {
 const api = {
     // F22: GET /api/rom/{nr}
     async hentRom(nr) {
-        return structuredClone(lokaltRom);      // en kopi, som fra serveren
+        const svar = await fetch(`/api/rom/${nr}`);
+        if(!svar.ok){
+            throw new Error(`${svar.status} fra serveren.`)
+        }
+        return svar.json();
     },
 
     // Et tilfeldig vandødt monster fra D&D-API-et (www.dnd5eapi.co),
@@ -329,3 +333,4 @@ async function start() {
 }
 
 start();
+setInterval(oppdater, 2000);
