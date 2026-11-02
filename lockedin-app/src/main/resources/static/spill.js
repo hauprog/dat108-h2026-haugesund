@@ -5,10 +5,9 @@
 // og tegn() som oppdaterer siden ut fra det. Lyd og effekter (juice) er
 // ikke tilstand, og ligger utenfor tegn().
 //
-// Status: hentDndMonster() bruker fetch mot D&D-API-et. hentRom() og
-// nyttMonster() bruker LOKALE data. Planen videre:
-//   F22: hentRom() med GET og nyttMonster() med POST mot vår server.
-//   F23: angrip() sender POST til serveren, som regner ut skaden.
+// Status etter F22: hentRom() (GET), nyttMonster() (POST) og
+// hentDndMonster() bruker fetch. Igjen: angrip() regner ut skaden selv,
+// her i nettleseren. Det flyttes til serveren senere.
 
 const ROMNR = 13;                               // Likhuset
 
@@ -33,20 +32,6 @@ const tilstand = {
 //
 // Funksjonene er async, så de gir et Promise, akkurat som fetch.
 // Da kan resten av koden være lik når vi bytter til serveren.
-
-// Lokale data, med samme form som JSON-en fra GET /api/rom/13.
-const lokaltRom = {
-    nr: 13,
-    navn: "Likhuset (lokale data)",
-    monstre: [
-        { navn: "Gresskarhodet", hp: 31, maxHP: 31, lever: true },
-        { navn: "Spøkelset", hp: 13, maxHP: 13, lever: true },
-        { navn: "Vampyren", hp: 66, maxHP: 66, lever: true }
-    ],
-    skatter: [
-        { navn: "godteri", verdi: 31 }
-    ]
-};
 
 const DND = "https://www.dnd5eapi.co";
 
@@ -86,14 +71,22 @@ const api = {
                  lever: true };
     },
 
-    // F22: POST /api/rom/{nr}/monstre, med { navn, hp } som JSON.
+    // POST /api/rom/{nr}/monstre, med { navn, hp } som JSON.
     // Svar: 201 Created, og monsteret slik serveren lagret det.
-    // NB: nå sendes monsteret ingen steder. Det finnes bare i denne fanen.
+    // (Live-koding 3 fra F22, ferdig skrevet.)
     async nyttMonster(nr, m) {
-        return m;
+        const svar = await fetch(`/api/rom/${nr}/monstre`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ navn: m.navn, hp: m.hp })
+        });
+        if (!svar.ok) {
+            throw new Error(`${svar.status} fra serveren`);
+        }
+        return svar.json();                     // { navn, hp, maxHP, lever }
     },
 
-    // F23: POST /api/rom/{nr}/angrep, med navnet på monsteret.
+    // Senere: POST /api/rom/{nr}/angrep, med navnet på monsteret.
     // Svar: { navn, skade, hp, lever }
     // NB: her regner klienten ut skaden selv. Det er det som skal bort.
     async angrip(nr, navn) {
@@ -291,8 +284,9 @@ async function innkall() {
         lyd.spill("loot");
     } catch (feil) {
         lyd.spill("feil");
-        visFeil("Fikk ikke innkalt et monster: " + feil.message);
-    }
+        logg("Fikk ikke innkalt et monster: " + feil.message);
+        tegn();                                 // feilboksen forsvinner ved
+    }                                           // neste oppdater(), loggen ikke
 }
 
 document.getElementById("innkall").addEventListener("click", innkall);

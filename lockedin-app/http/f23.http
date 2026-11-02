@@ -1,0 +1,67 @@
+# Forespørsler til F23: monstrene i Likhuset (rom 13), med feilkoder.
+# Klikk på den grønne pilen ved en forespørsel. Nøkkelen er den til
+# utvikling fra application.properties, ikke en hemmelighet.
+
+@rom = http://localhost:8080/api/rom/13
+@nokkel = dev-nokkel-123
+
+### ---- Live 1: resten av CRUD ----
+
+### Ett monster: 200
+GET {{rom}}/monstre/Vampyren
+
+### Et monster som ikke finnes: 404
+GET {{rom}}/monstre/Dracula
+
+### Innkall Heksen: 201, Location og monsteret som JSON
+POST {{rom}}/monstre
+Content-Type: application/json
+Api-Key: {{nokkel}}
+
+{ "navn": "Heksen", "hp": 40 }
+
+### Fordriv Vampyren: 204 første gang, 404 neste gang
+DELETE {{rom}}/monstre/Vampyren
+Api-Key: {{nokkel}}
+
+### ---- Live 2: validering og konflikt ----
+
+### Heksen en gang til: 409 Conflict
+POST {{rom}}/monstre
+Content-Type: application/json
+Api-Key: {{nokkel}}
+
+{ "navn": "Heksen", "hp": 40 }
+
+### Tomrommet med -5 hp: 400 (etter @Valid)
+POST {{rom}}/monstre
+Content-Type: application/json
+Api-Key: {{nokkel}}
+
+{ "navn": "Tomrommet", "hp": -5 }
+
+### Liten forbokstav og 0 hp: 400, med to feil
+POST {{rom}}/monstre
+Content-Type: application/json
+Api-Key: {{nokkel}}
+
+{ "navn": "heksen", "hp": 0 }
+
+### ---- Live 3: API-nøkkel ----
+
+### Uten nøkkel: 401
+POST {{rom}}/monstre
+Content-Type: application/json
+
+{ "navn": "Gjenferdet", "hp": 20 }
+
+### Feil nøkkel: 401
+DELETE {{rom}}/monstre/Gresskarhodet
+Api-Key: gjettet-nokkel
+
+### Riktig nøkkel: 204
+DELETE {{rom}}/monstre/Gresskarhodet
+Api-Key: {{nokkel}}
+
+### Lese er åpent: 200 uten nøkkel
+GET {{rom}}/monstre
