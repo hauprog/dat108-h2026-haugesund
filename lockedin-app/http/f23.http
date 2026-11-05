@@ -33,12 +33,12 @@ Api-Key: {{nokkel}}
 
 { "navn": "Heksen", "hp": 40 }
 
-### Tomrommet med -5 hp: 400 (etter @Valid)
+### Kakemonsteret med -5 hp: 400 (etter @Valid)
 POST {{rom}}/monstre
 Content-Type: application/json
 Api-Key: {{nokkel}}
 
-{ "navn": "Tomrommet", "hp": -5 }
+{ "navn": "Kakemonsteret", "hp": -5 }
 
 ### Liten forbokstav og 0 hp: 400, med to feil
 POST {{rom}}/monstre
