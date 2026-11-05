@@ -1,6 +1,5 @@
 package no.hvl.dat108.lockedin_app;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,15 +20,4 @@ public class LockedinAppApplication {
 				.redirect(HttpStatus.PERMANENT_REDIRECT)
 				.build();
 	}
-
-	// Kjøres én gang når appen har startet, og legger inn spillerne.
-	// CommandLineRunner er et funksjonelt grensesnitt (modul 1).
-	@Bean
-	public CommandLineRunner leggInnSpillere(SpillerRepository spillere){
-		return args -> {
-			spillere.save(new Spiller("Ole", "ostekake"));
-			spillere.save(new Spiller("Jonny", "gulrotkake"));
-		};
-	}
 }
-

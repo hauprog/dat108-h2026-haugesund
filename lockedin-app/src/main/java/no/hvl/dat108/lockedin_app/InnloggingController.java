@@ -11,9 +11,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class InnloggingController {
 
-    private final SpillerRepository spillere;
+    private final SpillerService spillere;
 
-    public InnloggingController(SpillerRepository spillere) {
+    public InnloggingController(SpillerService spillere) {
         this.spillere = spillere;
     }
 
@@ -27,10 +27,7 @@ public class InnloggingController {
                           @RequestParam String passord,
                           HttpServletRequest request,
                           RedirectAttributes ra) {
-        boolean riktig = spillere.findByNavn(navn)
-                .map(s -> s.getPassord().equals(passord))
-                .orElse(false);
-        if (!riktig) {
+        if (!spillere.riktigPassord(navn, passord)) {
             ra.addFlashAttribute("feilmelding",
                     "Ukjent helt eller feil passord.");
             return "redirect:/innlogging";
@@ -54,4 +51,3 @@ public class InnloggingController {
         return "redirect:/innlogging";
     }
 }
-

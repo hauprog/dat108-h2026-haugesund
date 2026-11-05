@@ -35,18 +35,18 @@ public class MonsterApiController {
 
     // GET    samlingen:    200 og alle monstrene
     @GetMapping
-    public List<RomVisning.MonsterVisning> alle(@PathVariable int nr){
+    public List<MonsterVisning> alle(@PathVariable int nr){
         return finnRom(nr).angripbare().stream()
-                .map(RomVisning.MonsterVisning::fra)
+                .map(MonsterVisning::fra)
                 .toList();
     }
 
     // GET    ett monster:  200 og monsteret, eller 404
     @GetMapping("/{navn}")
-    public ResponseEntity<RomVisning.MonsterVisning> ett(
+    public ResponseEntity<MonsterVisning> ett(
             @PathVariable int nr, @PathVariable String navn){
         return finnRom(nr).finnFoerste(a -> a.navn().equalsIgnoreCase(navn))
-                .map(RomVisning.MonsterVisning::fra)
+                .map(MonsterVisning::fra)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -54,7 +54,7 @@ public class MonsterApiController {
 
     // POST   samlingen:    201, Location og det nye monsteret
     @PostMapping
-    public ResponseEntity<RomVisning.MonsterVisning> nytt(
+    public ResponseEntity<MonsterVisning> nytt(
             @PathVariable int nr, @Valid @RequestBody NyttMonster ny) {
         Rom rom = finnRom(nr);
         if (rom.finnFoerste(a -> a.navn().equalsIgnoreCase(ny.navn()))
@@ -70,7 +70,7 @@ public class MonsterApiController {
                 .encode()
                 .toUri();
         return ResponseEntity.created(adresse)
-                .body(RomVisning.MonsterVisning.fra(monster));
+                .body(MonsterVisning.fra(monster));
     }
 
     // DELETE ett monster:  204 uten kropp, eller 404
