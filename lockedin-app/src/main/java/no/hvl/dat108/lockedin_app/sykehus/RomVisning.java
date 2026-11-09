@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.sykehus;
 
 import no.hvl.dat108.lockedin_app.spill.Rom;
 import no.hvl.dat108.lockedin_app.spill.Skatt;

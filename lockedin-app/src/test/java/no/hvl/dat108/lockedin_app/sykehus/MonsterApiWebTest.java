@@ -1,5 +1,9 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.sykehus;
 
+import no.hvl.dat108.lockedin_app.spill.Monster;
+import no.hvl.dat108.lockedin_app.spill.Rom;
+import no.hvl.dat108.lockedin_app.tilgang.ApiNokkelService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -7,12 +11,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.endsWith;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// Live 3 (F24): web-laget testet med HTTP-forespørsler, uten å starte en
-// server. Bare MonsterApiController lastes, og tjenestene er mocker.
+// F25, live 3 (fra F24): web-laget testet med HTTP-forespørsler, uten å
+// starte en server. Bare MonsterApiController lastes, og tjenestene er
+// mocker.
 @WebMvcTest(MonsterApiController.class)
 class MonsterApiWebTest {
 

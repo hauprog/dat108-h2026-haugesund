@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.spiller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

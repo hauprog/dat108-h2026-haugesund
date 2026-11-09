@@ -1,6 +1,7 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.demo;
 
 import no.hvl.dat108.lockedin_app.spill.Skatt;
+import no.hvl.dat108.lockedin_app.sykehus.SykehusService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -66,6 +66,12 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- F25: PostgreSQL, samme database som i DAT107 og Oblig5 -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -78,3 +84,4 @@
 	</build>
 
 </project>
+

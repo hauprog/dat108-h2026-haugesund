@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.sykehus;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

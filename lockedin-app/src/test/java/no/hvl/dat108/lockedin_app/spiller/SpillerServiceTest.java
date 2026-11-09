@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.spiller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-// Live 2 (F24), trinn 2: enhetstest med Mockito. SpillerService trenger et
-// SpillerRepository, og det byttes ut med en mock: ingen database.
+// Torsdag (F26), resten av F24: enhetstest med Mockito. SpillerService
+// trenger et SpillerRepository, og det byttes ut med en mock: ingen
+// database.
 class SpillerServiceTest {
 
 }

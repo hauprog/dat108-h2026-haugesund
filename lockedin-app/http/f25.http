@@ -1,0 +1,13 @@
+# Forespørsler til F25: spillerne fra databasen. Bare lesing, så ingen
+# nøkkel. Klikk på den grønne pilen ved en forespørsel.
+
+@spillere = http://localhost:8080/api/spillere
+
+### Alle spillerne: 200, en liste
+GET {{spillere}}
+
+### Én spiller: 200
+GET {{spillere}}/1
+
+### En id som ikke finnes: 404
+GET {{spillere}}/999

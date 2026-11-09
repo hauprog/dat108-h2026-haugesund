@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.sykehus;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

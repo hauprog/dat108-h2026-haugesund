@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.sykehus;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

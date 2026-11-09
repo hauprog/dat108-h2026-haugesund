@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.tilgang;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

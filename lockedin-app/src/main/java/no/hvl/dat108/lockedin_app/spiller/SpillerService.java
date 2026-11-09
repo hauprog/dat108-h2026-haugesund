@@ -1,11 +1,11 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.spiller;
 
 import org.springframework.stereotype.Service;
 
 // Passordsjekken, flyttet hit fra InnloggingController før F24. Kode i en
 // kontroller er tungvint å teste. I en service kan den testes alene, med
 // et falskt repository (Mockito).
-// Klartekst til F25: da blir dette hash og salt, og testene fra F24 sier
+// Klartekst til F26 (passord): da blir dette hash og salt, og testene sier
 // fra hvis innloggingen slutter å virke.
 @Service
 public class SpillerService {

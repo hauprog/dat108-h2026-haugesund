@@ -1,4 +1,4 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.spiller;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,10 +1,11 @@
-package no.hvl.dat108.lockedin_app;
+package no.hvl.dat108.lockedin_app.sykehus;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import no.hvl.dat108.lockedin_app.spill.Monster;
 import no.hvl.dat108.lockedin_app.spill.Rom;
+import no.hvl.dat108.lockedin_app.tilgang.ApiNokkelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
