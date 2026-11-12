@@ -18,6 +18,9 @@ public class Startdata implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        if (spillere.count() > 0){
+            return;
+        }
         spillere.save(new Spiller("Ole", "ostekake"));
         spillere.save(new Spiller("Jonny", "gulrotkake"));
     }
