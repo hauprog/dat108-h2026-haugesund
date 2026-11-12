@@ -1,0 +1,37 @@
+# Ordliste til OrdlisteAngrep (F25). Noen av de vanligste passordene,
+# og noen vanlige norske ord. Ekte ordlister har millioner av linjer.
+123456
+passord
+123456789
+qwerty
+12345678
+111111
+abc123
+passord1
+hemmelig
+sommer
+sommer2026
+vinter2025
+iloveyou
+admin
+letmein
+dragon
+monkey
+fotball
+rosenborg
+brann
+liverpool
+kanelbolle
+sjokoladekake
+eplekake
+ostekake
+vaffel
+brunost
+gulrotkake
+bløtkake
+pinnekjøtt
+fårikål
+lapskaus
+hallo123
+norge
+haugesund

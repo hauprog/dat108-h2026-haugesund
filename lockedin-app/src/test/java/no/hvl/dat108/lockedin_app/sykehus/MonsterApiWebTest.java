@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// F25, live 3 (fra F24): web-laget testet med HTTP-forespørsler, uten å
+// F26, live 1 (fra F24): web-laget testet med HTTP-forespørsler, uten å
 // starte en server. Bare MonsterApiController lastes, og tjenestene er
 // mocker.
 @WebMvcTest(MonsterApiController.class)
